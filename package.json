@@ -21,7 +21,7 @@
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
-    "dev": "vite",
+    "dev": "vite demo",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
