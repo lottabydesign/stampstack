@@ -8,6 +8,7 @@ export function StampStack<T extends { id: string }>({
   renderStamp,
   onSelect,
   onFocusChange,
+  frameColor,
   initialIndex = 0,
   cardWidth = 260,
   className,
@@ -41,7 +42,16 @@ export function StampStack<T extends { id: string }>({
                 aria-current={state.focused ? true : undefined}
                 onKeyDown={(e) => fan.handleCardKeyDown(index, e)}
                 className="stampstack-card-wrapper"
-                style={{ position: 'absolute', willChange: 'transform', ...fan.getCardStyle(index) }}
+                style={{
+                  position: 'absolute',
+                  willChange: 'transform',
+                  // Set on the wrapper (ancestor of both frame + content) so the
+                  // frame's `fill: var(--stampstack-frame)` picks it up per stamp.
+                  ...(frameColor
+                    ? { ['--stampstack-frame' as string]: frameColor(item, state) }
+                    : {}),
+                  ...fan.getCardStyle(index),
+                }}
               >
                 <StampFrame>{renderStamp(item, state)}</StampFrame>
               </div>

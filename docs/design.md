@@ -72,6 +72,7 @@ interface StampStackProps<T extends { id: string }> {
   renderStamp: (item: T, state: StampState) => React.ReactNode  // your content
   onSelect?: (item: T, index: number) => void
   onFocusChange?: (index: number) => void   // fires when the focused card changes
+  frameColor?: (item: T, state: StampState) => string  // per-stamp frame color (see §8)
   initialIndex?: number                      // default 0
   cardWidth?: number                         // default 260 (px)
   className?: string                         // passthrough on the scene element
@@ -168,8 +169,12 @@ app-specific coupling (router, `CityInfo`, Tailwind, rendered labels):
   opacity, z-index). Not themeable, intentionally.
 - The stamp vector (`STAMP_FRAME_PATH`) is hard-coded — the fixed signature.
   Recoloring the frame is allowed (`--stampstack-frame`); reshaping it is not.
-- Per-stamp frame colors: the consumer can tint the frame from their own content
-  or CSS. No imposed palette in v1.
+- Per-stamp frame colors: use the `frameColor?: (item, state) => string` prop.
+  The returned value is applied as `--stampstack-frame` on the card *wrapper*
+  (the common ancestor of the frame SVG and the content slot), so it cascades to
+  the frame's `fill`. Note: setting the variable from inside `renderStamp` content
+  does NOT work — content is a *sibling* of the frame, and CSS variables only
+  inherit downward, never sideways. No imposed palette in v1 (see §10 for v2).
 - Consumers import `styles.css` via the package's `exports` map
   (`import 'stampstack/styles.css'`) — the standard CSS-from-package pattern; it
   requires the consumer to have a bundler (Vite/webpack/Next), which is the norm.

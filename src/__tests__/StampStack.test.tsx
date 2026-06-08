@@ -57,4 +57,20 @@ describe('StampStack', () => {
     fireEvent.keyDown(card, { key: 'Enter' })
     expect(onSelect).toHaveBeenCalledWith(items[0], 0)
   })
+
+  it('applies frameColor to the card wrapper as the --stampstack-frame variable', () => {
+    render(
+      <StampStack
+        items={items}
+        renderStamp={renderStamp}
+        frameColor={(item) => (item.id === 'lagos' ? 'rgb(255, 0, 0)' : 'rgb(0, 128, 0)')}
+      />,
+    )
+    // The wrapper is the role=button ancestor of the rendered content. Its inline
+    // style must carry the per-item color as the CSS variable the frame reads.
+    const lagosWrapper = screen.getByText('Lagos').closest('[role="button"]') as HTMLElement
+    const abujaWrapper = screen.getByText('Abuja').closest('[role="button"]') as HTMLElement
+    expect(lagosWrapper.style.getPropertyValue('--stampstack-frame')).toBe('rgb(255, 0, 0)')
+    expect(abujaWrapper.style.getPropertyValue('--stampstack-frame')).toBe('rgb(0, 128, 0)')
+  })
 })

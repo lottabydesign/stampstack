@@ -20,6 +20,10 @@ export interface StampStackProps<T extends { id: string }> {
   onSelect?: (item: T, index: number) => void
   /** Fires when the focused card changes (mount + each change). */
   onFocusChange?: (index: number) => void
+  /** Per-stamp frame color. Returned value is applied to the card wrapper as the
+   *  `--stampstack-frame` CSS variable, so the (library-rendered) frame can differ
+   *  per item. Omit for a single color set via the `--stampstack-frame` variable. */
+  frameColor?: (item: T, state: StampState) => string
   initialIndex?: number      // default 0
   cardWidth?: number         // default 260 (px)
   className?: string         // passthrough on the scene element

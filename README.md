@@ -37,6 +37,7 @@ const items = [
 | `renderStamp` | `(item, state) => ReactNode` | — | Fills each stamp with your DOM. |
 | `onSelect` | `(item, index) => void` | — | Fires on a genuine tap of a visible card. |
 | `onFocusChange` | `(index) => void` | — | Fires when the focused card changes. |
+| `frameColor` | `(item, state) => string` | — | Per-stamp frame color. Omit for one color via the `--stampstack-frame` variable. |
 | `initialIndex` | `number` | `0` | Which card starts focused. |
 | `cardWidth` | `number` | `260` | Card width in px. |
 | `className` | `string` | — | Extra class on the root `.stampstack` element. |
