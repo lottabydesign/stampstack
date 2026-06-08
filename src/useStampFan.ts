@@ -25,7 +25,7 @@ export interface UseStampFanOptions {
 
 export interface UseStampFanResult {
   focusIndex: number
-  sceneRef: RefObject<HTMLDivElement | null>
+  sceneRef: RefObject<HTMLDivElement>
   getCardStyle: (index: number) => CSSProperties
   getCardState: (index: number) => StampState
   isInteractive: (index: number) => boolean
@@ -41,7 +41,7 @@ export function useStampFan({
   onSelect,
   onFocusChange,
 }: UseStampFanOptions): UseStampFanResult {
-  const sceneRef = useRef<HTMLDivElement | null>(null)
+  const sceneRef = useRef<HTMLDivElement>(null)
   const [focusIndex, setFocusIndex] = useState(initialIndex)
   // Live pixel offset during a drag; non-zero only while dragging.
   const [dragDx, setDragDx] = useState(0)
