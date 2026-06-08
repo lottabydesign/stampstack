@@ -39,6 +39,8 @@ const items = [
 | `onFocusChange` | `(index) => void` | — | Fires when the focused card changes. |
 | `initialIndex` | `number` | `0` | Which card starts focused. |
 | `cardWidth` | `number` | `260` | Card width in px. |
+| `className` | `string` | — | Extra class on the root `.stampstack` element. |
+| `style` | `CSSProperties` | — | Inline styles on the root element (e.g. to set height). |
 
 `state` is `{ focused, index, offset }` — use it to dim or change content on
 non-focused cards.
@@ -49,8 +51,10 @@ Import `stampstack/styles.css` for the frame, then override CSS variables:
 
 ```css
 .stampstack {
-  --stampstack-frame: hotpink;
-  --stampstack-radius: 16px;
+  --stampstack-frame: hotpink;                            /* frame fill color */
+  --stampstack-radius: 16px;                              /* inner content corner radius */
+  --stampstack-ease: cubic-bezier(0.34, 1.56, 0.64, 1);  /* the snap transition curve */
+  --stampstack-perspective: 800px;                        /* 3D depth (smaller = more dramatic) */
 }
 ```
 
