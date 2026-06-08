@@ -1,0 +1,63 @@
+/* stampstack — frame theme. The library imposes NO content styling and NO font;
+   your renderStamp content brings its own. Override any variable to retheme. */
+
+.stampstack {
+  --stampstack-frame: #295df6;          /* frame fill color */
+  --stampstack-radius: 21px;            /* inner content-area corner radius */
+  --stampstack-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --stampstack-perspective: 1200px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24rem;
+  overflow: hidden;
+}
+
+.stampstack-scene {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;                  /* page scrolls vertically; we own horizontal drag */
+  perspective: var(--stampstack-perspective);
+}
+
+.stampstack-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* Each positioned card wrapper gets its transform inline from getCardStyle. */
+.stampstack-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 277.508 / 316.88;       /* the stamp outline's native ratio */
+}
+
+.stampstack-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The slot your content renders into — inset to sit inside the scalloped edge. */
+.stampstack-content {
+  position: absolute;
+  inset: 7.85% 6.35%;
+  overflow: clip;
+  border-radius: var(--stampstack-radius);
+}
