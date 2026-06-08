@@ -50,14 +50,26 @@ export function useStampFan({
   // Set on pointerup when a drag moved, so the follow-up click is suppressed.
   const suppressNextClick = useRef(false)
 
-  // Tell the consumer when focus changes (replaces the original's router.prefetch).
+  // Keep the latest onFocusChange without making it an effect dependency —
+  // so a consumer passing an inline arrow doesn't re-fire this on every render.
+  const onFocusChangeRef = useRef(onFocusChange)
   useEffect(() => {
-    onFocusChange?.(focusIndex)
-  }, [focusIndex, onFocusChange])
+    onFocusChangeRef.current = onFocusChange
+  })
+
+  // Tell the consumer when focus changes (replaces the original's router.prefetch).
+  // Depends only on focusIndex, not the callback, so a new inline function identity
+  // on every parent render never re-triggers this.
+  useEffect(() => {
+    onFocusChangeRef.current?.(focusIndex)
+  }, [focusIndex])
 
   const navLeft = useCallback(() => setFocusIndex((i) => Math.max(0, i - 1)), [])
   const navRight = useCallback(() => setFocusIndex((i) => Math.min(itemCount - 1, i + 1)), [itemCount])
 
+  // Shared activation gate for both tap (onSceneClick) and keyboard
+  // (handleCardKeyDown). Suppress a click synthesized right after a drag
+  // that moved focus; otherwise open the card.
   const activate = useCallback(
     (index: number) => {
       if (suppressNextClick.current) {

@@ -48,4 +48,13 @@ describe('StampStack', () => {
     fireEvent.keyDown(window, { key: 'Enter' })
     expect(onSelect).toHaveBeenCalledWith(items[1], 1)
   })
+
+  it('opens a card when Enter is pressed on the card element itself', () => {
+    const onSelect = vi.fn()
+    render(<StampStack items={items} renderStamp={renderStamp} initialIndex={0} onSelect={onSelect} />)
+    // The focused card (index 0, "Lagos") is a role=button with the item text inside it.
+    const card = screen.getByText('Lagos').closest('[role="button"]') as HTMLElement
+    fireEvent.keyDown(card, { key: 'Enter' })
+    expect(onSelect).toHaveBeenCalledWith(items[0], 0)
+  })
 })

@@ -38,7 +38,7 @@ export function StampStack<T extends { id: string }>({
                 key={item.id}
                 role="button"
                 tabIndex={interactive ? 0 : -1}
-                aria-current={state.focused ? 'true' : undefined}
+                aria-current={state.focused ? true : undefined}
                 onKeyDown={(e) => fan.handleCardKeyDown(index, e)}
                 className="stampstack-card-wrapper"
                 style={{ position: 'absolute', willChange: 'transform', ...fan.getCardStyle(index) }}
