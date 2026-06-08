@@ -52,7 +52,7 @@ export function hitTest({
     const halfH = (cardHeight * p.sc) / 2
 
     const withinX = Math.abs(localX - p.tx) <= halfW
-    const withinY = Math.abs(localY - baselineY) <= halfH
+    const withinY = Math.abs(localY - baselineY) <= halfH  // all cards share the same Y center (baselineY); only X/Z/rotation vary
 
     if (withinX && withinY && absOff < hitAbs) {
       hitAbs = absOff

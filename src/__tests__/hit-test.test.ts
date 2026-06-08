@@ -31,4 +31,11 @@ describe('hitTest', () => {
     const hit = hitTest({ ...base, localX: 30, localY: CARD_BASELINE_Y })
     expect(hit).toBe(2)
   })
+
+  it('returns the index of a side card whose visible box contains the click', () => {
+    // base.focusIndex is 2, so card i=3 sits at offset +1 (tx = CARD_STEP).
+    // A click at x = CARD_STEP lands inside card 3's box, not the focused card.
+    const hit = hitTest({ ...base, localX: CARD_STEP, localY: CARD_BASELINE_Y })
+    expect(hit).toBe(3)
+  })
 })

@@ -2,11 +2,11 @@
 
 /** One row of the 3D fan: the transform applied at a given |offset| from focus. */
 export interface FanPos {
-  tx: number  // horizontal spread (px) — compresses with distance
-  tz: number  // depth (px) — focused card comes forward
-  ry: number  // Y-axis rotation (deg) — fans outward
-  sc: number  // scale — shrinks further out
-  op: number  // opacity — fades into the background
+  readonly tx: number  // horizontal spread (px) — compresses with distance
+  readonly tz: number  // depth (px) — focused card comes forward
+  readonly ry: number  // Y-axis rotation (deg) — fans outward
+  readonly sc: number  // scale — shrinks further out
+  readonly op: number  // opacity — fades into the background
 }
 
 /**
@@ -36,7 +36,7 @@ export const CARD_BASELINE_Y = -28
  *  produces a smoothly-morphed transform — the key to the coverflow feel. */
 export function posFromOffset(off: number): FanPos {
   const abs = Math.abs(off)
-  const sign = off < 0 ? -1 : off > 0 ? 1 : 0
+  const sign = off < 0 ? -1 : off > 0 ? 1 : 0  // sign is 0 at off=0; harmless because FAN_STOPS[0].tx and .ry are both 0
   const lo = Math.floor(abs)
   const hi = Math.min(lo + 1, FAN_STOPS.length - 1)
   const t = Math.min(1, abs - lo)

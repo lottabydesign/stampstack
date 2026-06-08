@@ -6,7 +6,7 @@ export interface ReleaseInput {
   cardStep: number   // px between adjacent card centers (CARD_STEP)
   startFocus: number // focusIndex when the drag began
   itemCount: number  // total number of cards
-  moved: boolean     // did the drag cross the 6px dead zone?
+  moved: boolean     // did the drag cross the dead zone? (threshold set by the caller)
 }
 
 /**
