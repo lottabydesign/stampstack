@@ -26,8 +26,7 @@ only on React.
 - A drop-in `<StampStack>` component anyone can `npm install` and use; it renders
   working, fanned, interactive stamps on install (cobe-style "just works").
 - Preserve the original's tactile feel: 3D fan, finger-following drag, flick /
-  long-drag release rules, edge rubber-banding, custom click hit-testing,
-  keyboard navigation.
+  long-drag release rules, edge rubber-banding, keyboard navigation.
 - Zero imposed styling on content; no imposed font. The consumer styles to taste.
 - Distinctive by design: the scalloped stamp silhouette is the fixed signature.
 - Clean internal seams so a headless hook *could* be exposed later without a
@@ -35,8 +34,10 @@ only on React.
 
 ## 3. Non-Goals (v1)
 
-- No router integration or `href`/anchor-link rendering. Navigation is the
-  consumer's job via `onSelect`.
+- No router integration, no tap-to-open, no `onSelect`. The carousel is a
+  drag-only browse/display widget; cards are not buttons. If opening a card is
+  needed, the consumer renders their own interactive element (e.g. a link) inside
+  `renderStamp` content.
 - No customizable frame vector — the stamp silhouette is hard-coded.
 - No library-rendered text/labels — content (and therefore typography/font) is
   the consumer's, supplied via `renderStamp`.
@@ -70,7 +71,6 @@ interface StampState {
 interface StampStackProps<T extends { id: string }> {
   items: T[]
   renderStamp: (item: T, state: StampState) => React.ReactNode  // your content
-  onSelect?: (item: T, index: number) => void
   onFocusChange?: (index: number) => void   // fires when the focused card changes
   frameColor?: (item: T, state: StampState) => string  // per-stamp frame color (see §8)
   initialIndex?: number                      // default 0
@@ -82,7 +82,6 @@ interface StampStackProps<T extends { id: string }> {
 <StampStack
   items={cities}
   renderStamp={(city, state) => <CityContent city={city} dim={!state.focused} />}
-  onSelect={(city) => router.push(`/city/${city.id}`)}
 />
 ```
 
@@ -92,19 +91,20 @@ interface StampStackProps<T extends { id: string }> {
 - `state` lets the consumer adapt content to focus/depth (e.g. dim or hide
   detail on non-focused cards) — the role the original's opacity logic played,
   now handed to the consumer.
-- `onSelect` replaces the original's hardcoded `router.push('/city/[slug]')`.
 - `onFocusChange` replaces the original's hardcoded `router.prefetch` — the
   consumer decides what "focus" means (prefetch, analytics, nothing).
-- Tap-vs-drag suppression is handled internally; `onSelect` only fires on a
-  genuine tap of a visible card, never at the end of a drag that moved focus.
+- The carousel is drag-only: there is no tap-to-open and no `onSelect`. To make a
+  stamp openable, put an interactive element (link/button) in `renderStamp` content.
 
 ## 5. Card Anatomy
 
 Every stamp is two layers:
 
 1. **Frame layer (library-owned):** the fixed scalloped SVG silhouette (the
-   signature) plus an inner content area, positioned and clipped for the
-   consumer. Frame color is a single themeable CSS variable (`--stampstack-frame`).
+   signature) plus a white inner "paper" card inset inside it (the stamp's paper
+   center), positioned and clipped for the consumer. Frame color is a themeable
+   CSS variable (`--stampstack-frame`, per-stamp via the `frameColor` prop); the
+   paper color is `--stampstack-card-bg` (default white).
 2. **Content layer (consumer-owned):** the output of `renderStamp`, placed inside
    the inner area. The consumer owns its text, font, colors, and layout.
 
@@ -118,7 +118,7 @@ One package, split into focused units:
 ```
 src/
   StampStack.tsx     // the component: scene, render loop, pointer/keyboard wiring
-  useStampFan.ts     // mechanics hook: focusIndex, dragDx, drag handlers, hit-test
+  useStampFan.ts     // mechanics hook: focusIndex, dragDx, drag handlers
   fan-stops.ts       // FAN_STOPS table, posFromOffset(), CARD_STEP, CARD_BASELINE_Y
   StampFrame.tsx     // the scalloped frame SVG + inner content slot
   stamp.ts           // STAMP_FRAME_PATH, STAMP_VIEWBOX (ported from src/lib/stamp.ts)
@@ -147,11 +147,8 @@ app-specific coupling (router, `CityInfo`, Tailwind, rendered labels):
   rubber-banding at 40% resistance past the first/last card.
 - **Release rules (from Swiper):** flick (<300ms and >20px → advance 1) or
   long-drag (>50% of card step → advance by rounded step count), else snap back.
-- **Click hit-testing:** scene-level delegation that recomputes each visible
-  card's on-screen box (with the `|cos(rotateY)|` width correction) and picks the
-  front-most card under the pointer — not the browser's ambiguous 3D hit-test.
-- **Keyboard:** ArrowLeft/Right move focus; Enter opens the focused card; ignores
-  events from form fields; per-card Enter/Space when a card is tab-focused.
+- **Keyboard:** ArrowLeft/Right move focus; ignores events from form fields
+  (INPUT/TEXTAREA/contentEditable). No Enter-to-open — the carousel is drag-only.
 
 ## 8. Styling & Theming
 
@@ -185,12 +182,10 @@ app-specific coupling (router, `CityInfo`, Tailwind, rendered labels):
 - **Unit tests (high value — the real "logic"):**
   - `posFromOffset` interpolation correctness (integer stops + fractional blends).
   - Release math: flick vs long-drag vs snap-back, including edge clamping.
-  - Hit-test box math, including the `|cos(rotateY)|` width correction.
 - **Component tests:**
   - `renderStamp` is called with the correct item and `state` (focused/index/offset).
-  - Arrow keys move focus; Enter opens the focused card.
-  - `onSelect` fires with the correct item/index on a tap.
-  - A drag that moves focus suppresses the follow-up `onSelect`.
+  - Arrow keys move focus (reported via `onFocusChange`).
+  - `frameColor` is applied to the card wrapper as the `--stampstack-frame` variable.
 
 ## 10. Future (v2)
 
