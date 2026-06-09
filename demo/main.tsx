@@ -23,7 +23,6 @@ function App() {
   return (
     <StampStack
       items={cities}
-      onSelect={(c) => alert(`Open ${c.name}`)}
       // Per-stamp frame color, decided in consumer-land from our own data.
       frameColor={(city) => colorFor(city.id)}
       renderStamp={(city, state) => (

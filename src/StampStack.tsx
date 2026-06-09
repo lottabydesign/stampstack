@@ -6,7 +6,6 @@ import type { StampStackProps } from './types'
 export function StampStack<T extends { id: string }>({
   items,
   renderStamp,
-  onSelect,
   onFocusChange,
   frameColor,
   initialIndex = 0,
@@ -18,7 +17,6 @@ export function StampStack<T extends { id: string }>({
     itemCount: items.length,
     initialIndex,
     cardWidth,
-    onSelect: onSelect ? (i) => onSelect(items[i], i) : undefined,
     onFocusChange,
   })
 
@@ -27,20 +25,14 @@ export function StampStack<T extends { id: string }>({
       <div
         ref={fan.sceneRef}
         onPointerDown={fan.onPointerDown}
-        onClick={fan.onSceneClick}
         className="stampstack-scene"
       >
         <div className="stampstack-track">
           {items.map((item, index) => {
             const state = fan.getCardState(index)
-            const interactive = fan.isInteractive(index)
             return (
               <div
                 key={item.id}
-                role="button"
-                tabIndex={interactive ? 0 : -1}
-                aria-current={state.focused ? true : undefined}
-                onKeyDown={(e) => fan.handleCardKeyDown(index, e)}
                 className="stampstack-card-wrapper"
                 style={{
                   position: 'absolute',

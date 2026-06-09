@@ -25,7 +25,6 @@ const items = [
   renderStamp={(item, state) => (
     <div style={{ opacity: state.focused ? 1 : 0.8 }}>{item.name}</div>
   )}
-  onSelect={(item) => console.log('open', item.id)}
 />
 ```
 
@@ -35,7 +34,6 @@ const items = [
 | --- | --- | --- | --- |
 | `items` | `T[]` (each needs `id`) | — | Your data. Only `id` is required. |
 | `renderStamp` | `(item, state) => ReactNode` | — | Fills each stamp with your DOM. |
-| `onSelect` | `(item, index) => void` | — | Fires on a genuine tap of a visible card. |
 | `onFocusChange` | `(index) => void` | — | Fires when the focused card changes. |
 | `frameColor` | `(item, state) => string` | — | Per-stamp frame color. Omit for one color via the `--stampstack-frame` variable. |
 | `initialIndex` | `number` | `0` | Which card starts focused. |
@@ -53,6 +51,7 @@ Import `stampstack/styles.css` for the frame, then override CSS variables:
 ```css
 .stampstack {
   --stampstack-frame: hotpink;                            /* frame fill color */
+  --stampstack-card-bg: #fff;            /* inner paper color */
   --stampstack-radius: 16px;                              /* inner content corner radius */
   --stampstack-ease: cubic-bezier(0.34, 1.56, 0.64, 1);  /* the snap transition curve */
   --stampstack-perspective: 800px;                        /* 3D depth (smaller = more dramatic) */
@@ -64,5 +63,4 @@ The library sets **no font** — your `renderStamp` content brings its own.
 ## Controls
 
 - **Drag / flick** to move through the fan
-- **Arrow keys** move focus; **Enter** opens the focused card
-- **Click** a visible card to open it
+- **Arrow keys** (← →) move focus left and right

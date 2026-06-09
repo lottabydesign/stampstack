@@ -3,6 +3,7 @@
 
 .stampstack {
   --stampstack-frame: #295df6;          /* frame fill color */
+  --stampstack-card-bg: #fff;           /* inner paper color */
   --stampstack-radius: 21px;            /* inner content-area corner radius */
   --stampstack-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --stampstack-perspective: 1200px;
@@ -54,10 +55,13 @@
   user-select: none;
 }
 
-/* The slot your content renders into — inset to sit inside the scalloped edge. */
+/* The slot your content renders into — inset to sit inside the scalloped edge.
+   White paper background with a thin colored inner border matching the frame. */
 .stampstack-content {
   position: absolute;
   inset: 7.85% 6.35%;
   overflow: clip;
   border-radius: var(--stampstack-radius);
+  background: var(--stampstack-card-bg, #fff);
+  border: 2px solid var(--stampstack-frame, #295df6);
 }

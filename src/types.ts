@@ -16,8 +16,6 @@ export interface StampStackProps<T extends { id: string }> {
   items: T[]
   /** Fill each stamp with your own DOM. Library positions/animates the result. */
   renderStamp: (item: T, state: StampState) => ReactNode
-  /** Fires on a genuine tap of a visible card (never at the end of a drag). */
-  onSelect?: (item: T, index: number) => void
   /** Fires when the focused card changes (mount + each change). */
   onFocusChange?: (index: number) => void
   /** Per-stamp frame color. Returned value is applied to the card wrapper as the

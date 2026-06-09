@@ -42,22 +42,6 @@ describe('StampStack', () => {
     expect(onFocusChange).toHaveBeenLastCalledWith(1)
   })
 
-  it('opens the focused card via window Enter', () => {
-    const onSelect = vi.fn()
-    render(<StampStack items={items} renderStamp={renderStamp} initialIndex={1} onSelect={onSelect} />)
-    fireEvent.keyDown(window, { key: 'Enter' })
-    expect(onSelect).toHaveBeenCalledWith(items[1], 1)
-  })
-
-  it('opens a card when Enter is pressed on the card element itself', () => {
-    const onSelect = vi.fn()
-    render(<StampStack items={items} renderStamp={renderStamp} initialIndex={0} onSelect={onSelect} />)
-    // The focused card (index 0, "Lagos") is a role=button with the item text inside it.
-    const card = screen.getByText('Lagos').closest('[role="button"]') as HTMLElement
-    fireEvent.keyDown(card, { key: 'Enter' })
-    expect(onSelect).toHaveBeenCalledWith(items[0], 0)
-  })
-
   it('applies frameColor to the card wrapper as the --stampstack-frame variable', () => {
     render(
       <StampStack
@@ -66,10 +50,10 @@ describe('StampStack', () => {
         frameColor={(item) => (item.id === 'lagos' ? 'rgb(255, 0, 0)' : 'rgb(0, 128, 0)')}
       />,
     )
-    // The wrapper is the role=button ancestor of the rendered content. Its inline
-    // style must carry the per-item color as the CSS variable the frame reads.
-    const lagosWrapper = screen.getByText('Lagos').closest('[role="button"]') as HTMLElement
-    const abujaWrapper = screen.getByText('Abuja').closest('[role="button"]') as HTMLElement
+    // The wrapper is the .stampstack-card-wrapper ancestor of the rendered content.
+    // Its inline style must carry the per-item color as the CSS variable the frame reads.
+    const lagosWrapper = screen.getByText('Lagos').closest('.stampstack-card-wrapper') as HTMLElement
+    const abujaWrapper = screen.getByText('Abuja').closest('.stampstack-card-wrapper') as HTMLElement
     expect(lagosWrapper.style.getPropertyValue('--stampstack-frame')).toBe('rgb(255, 0, 0)')
     expect(abujaWrapper.style.getPropertyValue('--stampstack-frame')).toBe('rgb(0, 128, 0)')
   })
