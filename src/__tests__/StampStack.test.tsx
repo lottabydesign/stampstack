@@ -42,17 +42,25 @@ describe('StampStack', () => {
     expect(onFocusChange).toHaveBeenLastCalledWith(1)
   })
 
-  it('lets a genuine tap through to interactive content (no drag = no suppression)', () => {
-    const onClick = vi.fn()
-    render(
-      <StampStack
-        items={items}
-        renderStamp={(item) => <button onClick={onClick}>open {item.title}</button>}
-      />,
-    )
-    // A plain click with no preceding drag must reach the consumer's button.
-    fireEvent.click(screen.getByText('open Lagos'))
-    expect(onClick).toHaveBeenCalledTimes(1)
+  it('fires onSelect for the focused (front-most) card on a genuine tap', () => {
+    const onSelect = vi.fn()
+    render(<StampStack items={items} renderStamp={renderStamp} initialIndex={0} onSelect={onSelect} />)
+    // A plain click (no preceding drag) resolves via hit-test to the front card.
+    fireEvent.click(screen.getByText('Lagos'))
+    expect(onSelect).toHaveBeenCalledWith(items[0], 0)
+  })
+
+  it('opens the focused card on Enter', () => {
+    const onSelect = vi.fn()
+    render(<StampStack items={items} renderStamp={renderStamp} initialIndex={1} onSelect={onSelect} />)
+    fireEvent.keyDown(window, { key: 'Enter' })
+    expect(onSelect).toHaveBeenCalledWith(items[1], 1)
+  })
+
+  it('does not make cards interactive when onSelect is omitted', () => {
+    render(<StampStack items={items} renderStamp={renderStamp} />)
+    // Without onSelect, wrappers are inert — no button role.
+    expect(screen.queryByRole('button')).toBeNull()
   })
 
   it('applies frameColor to the card wrapper as the --stampstack-frame variable', () => {

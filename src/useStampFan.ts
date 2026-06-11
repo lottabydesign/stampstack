@@ -5,12 +5,14 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from 'react'
 import { posFromOffset, CARD_STEP, CARD_BASELINE_Y } from './fan-stops'
 import { computeReleaseFocus } from './release'
+import { hitTest } from './hit-test'
 import type { StampState } from './types'
 
 export interface UseStampFanOptions {
@@ -18,6 +20,8 @@ export interface UseStampFanOptions {
   initialIndex?: number
   cardWidth?: number
   onFocusChange?: (index: number) => void
+  /** Called with the tapped card's index. Omit to make stamps non-interactive. */
+  onSelect?: (index: number) => void
 }
 
 export interface UseStampFanResult {
@@ -25,10 +29,12 @@ export interface UseStampFanResult {
   sceneRef: RefObject<HTMLDivElement>
   getCardStyle: (index: number) => CSSProperties
   getCardState: (index: number) => StampState
+  isInteractive: (index: number) => boolean
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void
-  /** Swallows the click the browser fires after a drag, so interactive content
-   *  (an <a>/<button> in renderStamp) only activates on a genuine tap. */
-  onClickCapture: (e: ReactMouseEvent<HTMLDivElement>) => void
+  /** Scene-level click delegation: accurate front-most-card hit-test → onSelect. */
+  onSceneClick: (e: ReactMouseEvent<HTMLDivElement>) => void
+  /** Per-card Enter/Space activation (keyboard equivalent of a tap). */
+  handleCardKeyDown: (index: number, e: ReactKeyboardEvent) => void
 }
 
 export function useStampFan({
@@ -36,6 +42,7 @@ export function useStampFan({
   initialIndex = 0,
   cardWidth = 260,
   onFocusChange,
+  onSelect,
 }: UseStampFanOptions): UseStampFanResult {
   const sceneRef = useRef<HTMLDivElement>(null)
   const [focusIndex, setFocusIndex] = useState(initialIndex)
@@ -44,8 +51,7 @@ export function useStampFan({
   const [isDragging, setIsDragging] = useState(false)
   const dragState = useRef<{ startX: number; startFocus: number; startTime: number; moved: boolean } | null>(null)
   // Set true when a drag (not a tap) is released, so the click the browser fires
-  // afterward is swallowed in the capture phase before it reaches consumer content
-  // (e.g. an <a>/<button> in renderStamp). A genuine tap leaves it false.
+  // afterward is ignored by onSceneClick — dragging the fan never opens a card.
   const suppressClickRef = useRef(false)
 
   // Keep the latest onFocusChange without making it an effect dependency —
@@ -65,17 +71,36 @@ export function useStampFan({
   const navLeft = useCallback(() => setFocusIndex((i) => Math.max(0, i - 1)), [])
   const navRight = useCallback(() => setFocusIndex((i) => Math.min(itemCount - 1, i + 1)), [itemCount])
 
-  // Window keyboard nav: arrows move focus only (no Enter/open).
+  // Shared activation gate for tap (onSceneClick) and keyboard (handleCardKeyDown).
+  // Skips a click synthesized right after a drag; otherwise opens the card.
+  const activate = useCallback(
+    (index: number) => {
+      if (suppressClickRef.current) {
+        suppressClickRef.current = false
+        return
+      }
+      onSelect?.(index)
+    },
+    [onSelect],
+  )
+
+  // Window keyboard nav: arrows move focus; Enter opens the focused card (unless a
+  // specific card is tab-focused, in which case its own onKeyDown handles it).
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
       if (e.key === 'ArrowLeft') return navLeft()
       if (e.key === 'ArrowRight') return navRight()
+      if (e.key === 'Enter') {
+        const active = document.activeElement as HTMLElement | null
+        if (active && sceneRef.current?.contains(active)) return
+        activate(focusIndex)
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [navLeft, navRight])
+  }, [navLeft, navRight, activate, focusIndex])
 
   // Pointer drag: live finger-following + Swiper-style release.
   useEffect(() => {
@@ -112,7 +137,7 @@ export function useStampFan({
         moved: state.moved,
       })
       // If this gesture was a drag, suppress the click that follows so it can't
-      // misfire interactive content. A tap (never moved) leaves it false.
+      // open a card. A tap (never moved) leaves it false.
       suppressClickRef.current = state.moved
       setFocusIndex(next)
       setIsDragging(false)
@@ -139,21 +164,57 @@ export function useStampFan({
     [focusIndex],
   )
 
-  // Capture-phase click guard: if the gesture was a drag, cancel the click before
-  // it reaches consumer content (prevents <a> navigation / onClick from a drag).
-  const onClickCapture = useCallback((e: ReactMouseEvent<HTMLDivElement>) => {
-    if (suppressClickRef.current) {
-      e.preventDefault()
-      e.stopPropagation()
-      suppressClickRef.current = false
-    }
-  }, [])
+  // Scene-level click delegation. We do NOT trust the browser's 3D hit-test (it
+  // picks the card closest in z-depth, not the one the user sees on top). Instead
+  // we compute each visible card's on-screen box ourselves and pick the front-most
+  // card under the pointer — accurate even for rotated, overlapping fanned cards.
+  const onSceneClick = useCallback(
+    (e: ReactMouseEvent<HTMLDivElement>) => {
+      if (suppressClickRef.current) {
+        suppressClickRef.current = false
+        return
+      }
+      const scene = sceneRef.current
+      if (!scene) return
+      const rect = scene.getBoundingClientRect()
+      const localX = e.clientX - (rect.left + rect.width / 2)
+      const localY = e.clientY - (rect.top + rect.height / 2)
+      const hit = hitTest({
+        localX,
+        localY,
+        focusIndex,
+        dragDx,
+        itemCount,
+        cardWidth,
+        cardStep: CARD_STEP,
+        baselineY: CARD_BASELINE_Y,
+      })
+      if (hit === -1) return
+      activate(hit)
+    },
+    [focusIndex, dragDx, itemCount, cardWidth, activate],
+  )
+
+  const handleCardKeyDown = useCallback(
+    (index: number, e: ReactKeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        activate(index)
+      }
+    },
+    [activate],
+  )
 
   const getCardState = useCallback(
     (index: number): StampState => {
       const offset = index - focusIndex + dragDx / CARD_STEP
       return { focused: Math.round(offset) === 0, index, offset }
     },
+    [focusIndex, dragDx],
+  )
+
+  const isInteractive = useCallback(
+    (index: number) => posFromOffset(index - focusIndex + dragDx / CARD_STEP).op > 0.1,
     [focusIndex, dragDx],
   )
 
@@ -182,7 +243,9 @@ export function useStampFan({
     sceneRef,
     getCardStyle,
     getCardState,
+    isInteractive,
     onPointerDown,
-    onClickCapture,
+    onSceneClick,
+    handleCardKeyDown,
   }
 }

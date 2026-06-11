@@ -6,6 +6,7 @@ import type { StampStackProps } from './types'
 export function StampStack<T extends { id: string }>({
   items,
   renderStamp,
+  onSelect,
   onFocusChange,
   frameColor,
   initialIndex = 0,
@@ -18,7 +19,13 @@ export function StampStack<T extends { id: string }>({
     initialIndex,
     cardWidth,
     onFocusChange,
+    // Adapt the hook's index-based callback to the public (item, index) shape.
+    onSelect: onSelect ? (i) => onSelect(items[i], i) : undefined,
   })
+
+  // Only when onSelect is provided do stamps become interactive (button role,
+  // keyboard activation). Without it, they're inert presentational cards.
+  const clickable = !!onSelect
 
   return (
     <div className={className ? `stampstack ${className}` : 'stampstack'} style={style}>
@@ -29,18 +36,22 @@ export function StampStack<T extends { id: string }>({
         // which any <img>/<a> in consumer content triggers and which fights our
         // pointer-based fan drag.
         onDragStart={(e) => e.preventDefault()}
-        // Swallow the post-drag click so interactive content (links/buttons in
-        // renderStamp) only fires on a genuine tap, never at the end of a drag.
-        onClickCapture={fan.onClickCapture}
+        // Scene-level click delegation → accurate front-most-card hit-test.
+        onClick={fan.onSceneClick}
         className="stampstack-scene"
       >
         <div className="stampstack-track">
           {items.map((item, index) => {
             const state = fan.getCardState(index)
+            const interactive = fan.isInteractive(index)
             return (
               <div
                 key={item.id}
                 className="stampstack-card-wrapper"
+                role={clickable ? 'button' : undefined}
+                tabIndex={clickable ? (interactive ? 0 : -1) : undefined}
+                aria-current={clickable && state.focused ? true : undefined}
+                onKeyDown={clickable ? (e) => fan.handleCardKeyDown(index, e) : undefined}
                 style={{
                   position: 'absolute',
                   willChange: 'transform',

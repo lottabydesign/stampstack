@@ -38,6 +38,7 @@ const items = [
     <div style={{ opacity: state.focused ? 1 : 0.8 }}>{item.title}</div>
   )}
   // ── all optional ───────────────────────────────────────────────
+  onSelect={(item, index) => {}}               // open a card on tap (omit = non-interactive)
   frameColor={(item) => '#295df6'}             // per-stamp frame color
   onFocusChange={(index) => {}}                // focused card changed
   initialIndex={0}                             // which card starts focused (default 0)
@@ -54,19 +55,21 @@ font**; your content brings its own.
 
 ## Clickable stamps
 
-Stamps do nothing on tap by default. To make one interactive, just put a link or
-button **in your content** — there's no prop to flip:
+Stamps are non-interactive by default. Pass `onSelect` to make them tappable:
 
 ```tsx
-renderStamp={(item) => (
-  <a href={`/p/${item.id}`} style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
-    {item.title}
-  </a>
-)}
+<StampStack
+  items={items}
+  onSelect={(item, index) => router.push(`/p/${item.id}`)}
+  renderStamp={(item) => <div>{item.title}</div>}
+/>
 ```
 
-The library guarantees it only fires on a **genuine tap** — a click at the end of a
-drag is suppressed, so dragging the fan never accidentally follows a link.
+`onSelect` fires for the **visually front-most card under the pointer** — accurate
+even for rotated, overlapping fanned cards, because the library does its own
+hit-testing instead of trusting the browser's 3D guess. It **never fires after a
+drag**, and cards become keyboard-activatable (Tab to a card + Enter/Space, or Enter
+opens the focused card). Omit `onSelect` and stamps are inert.
 
 ## Theming
 
