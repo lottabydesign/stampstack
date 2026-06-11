@@ -1,6 +1,6 @@
 {
   "name": "stampstack",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A draggable 3D coverflow of scalloped postage-stamp cards. Bring your own content.",
   "type": "module",
   "license": "MIT",
@@ -22,7 +22,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "dev": "vite demo",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18",
