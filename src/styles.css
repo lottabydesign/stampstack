@@ -67,3 +67,20 @@
   background: var(--stampstack-card-bg, #fff);
   border: 2px solid var(--stampstack-frame, #295df6);
 }
+
+/* ── Opt-in dark theme ──────────────────────────────────────────────────
+   Add data-theme="dark" on the .stampstack element (or any ancestor) to
+   switch the stamp's paper to a dark surface. The frame color still comes
+   from --stampstack-frame (or the per-stamp `frameColor` prop). Your
+   renderStamp content is yours to make light — the library themes only the
+   frame + paper. */
+.stampstack[data-theme='dark'],
+[data-theme='dark'] .stampstack {
+  --stampstack-card-bg: #1c1d24;          /* elevated charcoal "paper" */
+}
+
+.stampstack[data-theme='dark'] .stampstack-content,
+[data-theme='dark'] .stampstack .stampstack-content {
+  /* faint inner hairline so the dark paper edge stays legible inside the frame */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}

@@ -60,6 +60,20 @@ Import `stampstack/styles.css` for the frame, then override CSS variables:
 
 The library sets **no font** — your `renderStamp` content brings its own.
 
+### Dark mode
+
+Add `data-theme="dark"` on the `.stampstack` element (or any ancestor — e.g. `<body>`,
+or your app's theme wrapper) to switch the stamp's paper to a dark surface:
+
+```html
+<body data-theme="dark"> … </body>
+```
+
+It themes the **paper** (to an elevated charcoal); the frame color still comes from
+`--stampstack-frame` or the per-stamp `frameColor` prop. Your `renderStamp` content is
+yours to make light. Override `--stampstack-card-bg` under the dark selector if you want
+a different dark surface.
+
 ## Controls
 
 - **Drag / flick** to move through the fan
