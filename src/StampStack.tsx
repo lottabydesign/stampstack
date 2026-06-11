@@ -25,6 +25,10 @@ export function StampStack<T extends { id: string }>({
       <div
         ref={fan.sceneRef}
         onPointerDown={fan.onPointerDown}
+        // Cancel native HTML5 drag (the browser's "drag the image out" ghost),
+        // which any <img>/<a> in consumer content triggers and which fights our
+        // pointer-based fan drag.
+        onDragStart={(e) => e.preventDefault()}
         className="stampstack-scene"
       >
         <div className="stampstack-track">
