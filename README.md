@@ -11,7 +11,9 @@
   <strong>Zero deps. ~5KB gzipped. React 18+.</strong>
 </p>
 
-<!-- TODO: add a centered demo gif/banner and a link to the hosted playground -->
+<p align="center">
+  <img src="assets/stampstack.gif" width="640" alt="stampstack — a 3D fan of postage-stamp cards" />
+</p>
 
 ## Quick Start
 
