@@ -17,6 +17,15 @@ const cities = [
   { id: 'kano', name: 'Kano', courts: 3 },
   { id: 'ibadan', name: 'Ibadan', courts: 5 },
   { id: 'phc', name: 'Port Harcourt', courts: 4 },
+  { id: 'benin', name: 'Benin City', courts: 6 },
+  { id: 'kaduna', name: 'Kaduna', courts: 4 },
+  { id: 'enugu', name: 'Enugu', courts: 5 },
+  { id: 'jos', name: 'Jos', courts: 2 },
+  { id: 'ilorin', name: 'Ilorin', courts: 3 },
+  { id: 'owerri', name: 'Owerri', courts: 4 },
+  { id: 'calabar', name: 'Calabar', courts: 2 },
+  { id: 'uyo', name: 'Uyo', courts: 3 },
+  { id: 'abeokuta', name: 'Abeokuta', courts: 5 },
 ]
 
 function App() {
