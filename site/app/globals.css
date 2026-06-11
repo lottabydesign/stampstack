@@ -5,6 +5,11 @@
   --muted: #8a8a8a;
   --border: #ececec;
   --accent: #295df6;
+
+  --font-ui: var(--font-open-runde), -apple-system, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --maxw: 640px;
 }
 
 * { box-sizing: border-box; }
@@ -14,4 +19,55 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* A thin gradient hairline along the very top — the one playful accent. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #295df6, #c6a0fd, #5cd500, #ff7a45, #ff3e8c, #00c9a7);
+  z-index: 100;
+}
+
+main {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px 120px;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* The quiet section label — the haptics signature. */
+.section-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+/* Code cards (Shiki output lives inside .code-card). */
+.code-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.code-card pre {
+  margin: 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  background: var(--card) !important;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.code-card code { font-family: var(--font-mono); }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import 'stampstack/styles.css'
+import { openRunde, geistMono } from './fonts'
 
 export const metadata: Metadata = {
   title: 'stampstack — a draggable 3D coverflow of postage-stamp cards',
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${openRunde.variable} ${geistMono.variable}`}>
       <body>{children}</body>
     </html>
   )
