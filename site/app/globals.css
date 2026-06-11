@@ -6,8 +6,10 @@
   --border: #ececec;
   --accent: #295df6;
 
-  --font-ui: var(--font-open-runde), -apple-system, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  /* The `, system-ui` fallback inside var() matters: if the next/font variable
+     isn't resolved yet, var() would otherwise invalidate font-family → serif. */
+  --font-ui: var(--font-open-runde, system-ui), -apple-system, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono, ui-monospace), SFMono-Regular, monospace;
 
   --maxw: 640px;
 }

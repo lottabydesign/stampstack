@@ -34,26 +34,30 @@ export function ThemeDemo() {
           {dark ? 'Light' : 'Dark'}
         </button>
       </div>
-      <StampStack
-        items={DEMO_ITEMS.slice(0, 5)}
-        cardWidth={150}
-        frameColor={(item) => demoColor(item.id)}
-        renderStamp={(item) => (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              fontFamily: 'var(--font-ui)',
-              fontWeight: 600,
-              fontSize: 16,
-            }}
-          >
-            {item.label}
-          </div>
-        )}
-      />
+      <div style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
+        <StampStack
+          items={DEMO_ITEMS.slice(0, 5)}
+          cardWidth={130}
+          initialIndex={2}
+          style={{ width: 130, height: 190 }}
+          frameColor={(item) => demoColor(item.id)}
+          renderStamp={(item) => (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              {item.label}
+            </div>
+          )}
+        />
+      </div>
     </div>
   )
 }

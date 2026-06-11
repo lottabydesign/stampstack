@@ -5,10 +5,23 @@ import { DEMO_ITEMS, demoColor } from './demo-stamps'
 export function Hero() {
   return (
     <header style={{ paddingTop: 56, textAlign: 'center' }}>
-      {/* Live, draggable fan — the product is the hero. */}
-      <div style={{ position: 'relative' }}>
+      {/* Live, draggable fan — the product is the hero. The library places the
+          focused card at the left of its root, so we give StampStack a narrow
+          width (= cardWidth) and center it in a wider clipping container; the fan
+          then spreads symmetrically and clips cleanly at both edges. */}
+      <div
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <StampStack
           items={DEMO_ITEMS}
+          cardWidth={190}
+          initialIndex={Math.floor(DEMO_ITEMS.length / 2)}
+          style={{ width: 190, height: 320 }}
           frameColor={(item) => demoColor(item.id)}
           onSelect={(item) => window.alert(`Tapped ${item.label}`)}
           renderStamp={(item, state) => (
@@ -29,10 +42,10 @@ export function Hero() {
             </div>
           )}
         />
-        <span style={{ display: 'block', marginTop: -8, fontSize: 13, color: 'var(--muted)' }}>
-          ← drag the fan →
-        </span>
       </div>
+      <span style={{ display: 'block', marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>
+        ← drag the fan →
+      </span>
 
       <h1 style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.02em', margin: '28px 0 10px' }}>
         stampstack
