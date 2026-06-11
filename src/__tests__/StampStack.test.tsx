@@ -42,6 +42,19 @@ describe('StampStack', () => {
     expect(onFocusChange).toHaveBeenLastCalledWith(1)
   })
 
+  it('lets a genuine tap through to interactive content (no drag = no suppression)', () => {
+    const onClick = vi.fn()
+    render(
+      <StampStack
+        items={items}
+        renderStamp={(item) => <button onClick={onClick}>open {item.title}</button>}
+      />,
+    )
+    // A plain click with no preceding drag must reach the consumer's button.
+    fireEvent.click(screen.getByText('open Lagos'))
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+
   it('applies frameColor to the card wrapper as the --stampstack-frame variable', () => {
     render(
       <StampStack

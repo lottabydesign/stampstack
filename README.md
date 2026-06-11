@@ -52,6 +52,22 @@ font**; your content brings its own.
 
 **Controls:** drag / flick to move through the fan; arrow keys (← →) move focus.
 
+## Clickable stamps
+
+Stamps do nothing on tap by default. To make one interactive, just put a link or
+button **in your content** — there's no prop to flip:
+
+```tsx
+renderStamp={(item) => (
+  <a href={`/p/${item.id}`} style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
+    {item.title}
+  </a>
+)}
+```
+
+The library guarantees it only fires on a **genuine tap** — a click at the end of a
+drag is suppressed, so dragging the fan never accidentally follows a link.
+
 ## Theming
 
 Import `stampstack/styles.css`, then override any CSS variable on `.stampstack`:

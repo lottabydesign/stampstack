@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from 'react'
@@ -25,6 +26,9 @@ export interface UseStampFanResult {
   getCardStyle: (index: number) => CSSProperties
   getCardState: (index: number) => StampState
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void
+  /** Swallows the click the browser fires after a drag, so interactive content
+   *  (an <a>/<button> in renderStamp) only activates on a genuine tap. */
+  onClickCapture: (e: ReactMouseEvent<HTMLDivElement>) => void
 }
 
 export function useStampFan({
@@ -39,6 +43,10 @@ export function useStampFan({
   const [dragDx, setDragDx] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const dragState = useRef<{ startX: number; startFocus: number; startTime: number; moved: boolean } | null>(null)
+  // Set true when a drag (not a tap) is released, so the click the browser fires
+  // afterward is swallowed in the capture phase before it reaches consumer content
+  // (e.g. an <a>/<button> in renderStamp). A genuine tap leaves it false.
+  const suppressClickRef = useRef(false)
 
   // Keep the latest onFocusChange without making it an effect dependency —
   // so a consumer passing an inline arrow doesn't re-fire this on every render.
@@ -103,6 +111,9 @@ export function useStampFan({
         itemCount,
         moved: state.moved,
       })
+      // If this gesture was a drag, suppress the click that follows so it can't
+      // misfire interactive content. A tap (never moved) leaves it false.
+      suppressClickRef.current = state.moved
       setFocusIndex(next)
       setIsDragging(false)
       setDragDx(0)
@@ -120,11 +131,23 @@ export function useStampFan({
   const onPointerDown = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
       dragState.current = { startX: e.clientX, startFocus: focusIndex, startTime: Date.now(), moved: false }
+      // Fresh gesture — clear any stale suppression from a prior drag.
+      suppressClickRef.current = false
       setIsDragging(true)
       if (sceneRef.current) sceneRef.current.style.cursor = 'grabbing'
     },
     [focusIndex],
   )
+
+  // Capture-phase click guard: if the gesture was a drag, cancel the click before
+  // it reaches consumer content (prevents <a> navigation / onClick from a drag).
+  const onClickCapture = useCallback((e: ReactMouseEvent<HTMLDivElement>) => {
+    if (suppressClickRef.current) {
+      e.preventDefault()
+      e.stopPropagation()
+      suppressClickRef.current = false
+    }
+  }, [])
 
   const getCardState = useCallback(
     (index: number): StampState => {
@@ -160,5 +183,6 @@ export function useStampFan({
     getCardStyle,
     getCardState,
     onPointerDown,
+    onClickCapture,
   }
 }

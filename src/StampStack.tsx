@@ -29,6 +29,9 @@ export function StampStack<T extends { id: string }>({
         // which any <img>/<a> in consumer content triggers and which fights our
         // pointer-based fan drag.
         onDragStart={(e) => e.preventDefault()}
+        // Swallow the post-drag click so interactive content (links/buttons in
+        // renderStamp) only fires on a genuine tap, never at the end of a drag.
+        onClickCapture={fan.onClickCapture}
         className="stampstack-scene"
       >
         <div className="stampstack-track">
