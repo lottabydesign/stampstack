@@ -35,19 +35,29 @@ function App() {
       // Per-stamp frame color, decided in consumer-land from our own data.
       frameColor={(city) => colorFor(city.id)}
       renderStamp={(city, state) => (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            opacity: state.focused ? 1 : 0.85,
-            fontFamily: 'system-ui, sans-serif',
-          }}
-        >
-          <strong style={{ fontSize: 20, color: '#404040' }}>{city.name}</strong>
-          <span style={{ fontSize: 12, color: '#888' }}>{city.courts} Courts</span>
+        // Full-bleed photo on the white paper, with a caption over the bottom.
+        // The library's content slot clips this to the rounded inner-card shape.
+        <div style={{ position: 'relative', height: '100%', opacity: state.focused ? 1 : 0.9 }}>
+          <img
+            src={`https://picsum.photos/seed/${city.id}/400/480`}
+            alt={city.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              padding: '12px 14px',
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.65))',
+              color: '#fff',
+              fontFamily: 'system-ui, sans-serif',
+            }}
+          >
+            <strong style={{ fontSize: 18, display: 'block', lineHeight: 1.1 }}>{city.name}</strong>
+            <span style={{ fontSize: 12, opacity: 0.9 }}>{city.courts} Courts</span>
+          </div>
         </div>
       )}
     />
