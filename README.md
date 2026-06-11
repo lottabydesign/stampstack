@@ -1,82 +1,92 @@
-# stampstack
+<p align="center">
+  <strong>stampstack</strong>
+</p>
 
-A draggable 3D coverflow of scalloped postage-stamp cards. The library owns the
-stamp frame and the fan mechanics; **you bring the content.**
+<p align="center">
+  A draggable 3D coverflow of scalloped postage-stamp cards.<br/>
+  Bring your own content — the library owns the frame and the fan, you fill the stamp.
+</p>
 
-## Install
+<p align="center">
+  <strong>Zero deps. ~5KB gzipped. React 18+.</strong>
+</p>
+
+<!-- TODO: add a centered demo gif/banner and a link to the hosted playground -->
+
+## Quick Start
 
 ```bash
 npm install stampstack
 ```
 
-## Usage
-
 ```tsx
 import { StampStack } from 'stampstack'
 import 'stampstack/styles.css'
 
+// Your data — each item only needs an `id`. Everything else is yours.
 const items = [
-  { id: 'lagos', name: 'Lagos' },
-  { id: 'abuja', name: 'Abuja' },
+  { id: 'a', title: 'First' },
+  { id: 'b', title: 'Second' },
+  { id: 'c', title: 'Third' },
 ]
 
 <StampStack
   items={items}
-  renderStamp={(item, state) => (
-    <div style={{ opacity: state.focused ? 1 : 0.8 }}>{item.name}</div>
+  renderStamp={(item, state) => (              // fill each stamp with your own DOM
+    <div style={{ opacity: state.focused ? 1 : 0.8 }}>{item.title}</div>
   )}
+  // ── all optional ───────────────────────────────────────────────
+  frameColor={(item) => '#295df6'}             // per-stamp frame color
+  onFocusChange={(index) => {}}                // focused card changed
+  initialIndex={0}                             // which card starts focused (default 0)
+  cardWidth={260}                              // card width in px (default 260)
+  // className / style are forwarded to the root .stampstack element
 />
 ```
 
-## Props
+`renderStamp` receives a `state` of `{ focused, index, offset }` — use it to dim,
+hide, or swap detail on non-focused cards. The library renders **no text and no
+font**; your content brings its own.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `items` | `T[]` (each needs `id`) | — | Your data. Only `id` is required. |
-| `renderStamp` | `(item, state) => ReactNode` | — | Fills each stamp with your DOM. |
-| `onFocusChange` | `(index) => void` | — | Fires when the focused card changes. |
-| `frameColor` | `(item, state) => string` | — | Per-stamp frame color. Omit for one color via the `--stampstack-frame` variable. |
-| `initialIndex` | `number` | `0` | Which card starts focused. |
-| `cardWidth` | `number` | `260` | Card width in px. |
-| `className` | `string` | — | Extra class on the root `.stampstack` element. |
-| `style` | `CSSProperties` | — | Inline styles on the root element (e.g. to set height). |
-
-`state` is `{ focused, index, offset }` — use it to dim or change content on
-non-focused cards.
+**Controls:** drag / flick to move through the fan; arrow keys (← →) move focus.
 
 ## Theming
 
-Import `stampstack/styles.css` for the frame, then override CSS variables:
+Import `stampstack/styles.css`, then override any CSS variable on `.stampstack`:
 
 ```css
 .stampstack {
-  --stampstack-frame: hotpink;                            /* frame fill color */
-  --stampstack-card-bg: #fff;            /* inner paper color */
-  --stampstack-text: #2a2b32;            /* default content text color (inherited; flips in dark) */
-  --stampstack-radius: 16px;                              /* inner content corner radius */
-  --stampstack-ease: cubic-bezier(0.34, 1.56, 0.64, 1);  /* the snap transition curve */
-  --stampstack-perspective: 800px;                        /* 3D depth (smaller = more dramatic) */
+  --stampstack-frame: #295df6;                           /* frame color */
+  --stampstack-card-bg: #fff;                            /* inner "paper" color */
+  --stampstack-text: #2a2b32;                            /* default text (inherited; flips in dark) */
+  --stampstack-radius: 21px;                             /* inner card corner radius */
+  --stampstack-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* snap transition curve */
+  --stampstack-perspective: 1200px;                      /* 3D depth (smaller = more dramatic) */
 }
 ```
 
-The library sets **no font** — your `renderStamp` content brings its own.
+The scalloped stamp silhouette is fixed — it's the signature. You can recolor and
+restyle everything else, but you can't reshape it.
 
-### Dark mode
+## Dark mode
 
-Add `data-theme="dark"` on the `.stampstack` element (or any ancestor — e.g. `<body>`,
-or your app's theme wrapper) to switch the stamp's paper to a dark surface:
+Add `data-theme="dark"` on `.stampstack` (or any ancestor — e.g. `<body>` or your
+app's theme wrapper):
 
 ```html
 <body data-theme="dark"> … </body>
 ```
 
-It themes the **paper** (to an elevated charcoal) and flips the default **text color**
-to light — so any `renderStamp` text that doesn't hard-code its own `color` inherits it
-and adapts automatically. Text you explicitly color stays as you set it. The frame color
-still comes from `--stampstack-frame` or the per-stamp `frameColor` prop. Override
-`--stampstack-card-bg` / `--stampstack-text` under the dark selector to customize.
+It themes the **paper** (to an elevated charcoal) and flips the default **text
+color** to light — so plain `renderStamp` text that doesn't hard-code its own
+`color` adapts automatically. The library themes only what it owns (paper, default
+text); the page background and any explicitly-colored content stay yours.
 
-## Controls
+## Acknowledgment
 
-- **Drag / flick** to move through the fan
-- **Arrow keys** (← →) move focus left and right
+- Drag / flick release behavior adapted from [Swiper](https://swiperjs.com)'s coverflow.
+- API and README shape inspired by [cobe](https://github.com/shuding/cobe).
+
+## License
+
+The MIT License.
