@@ -4,6 +4,7 @@
 .stampstack {
   --stampstack-frame: #295df6;          /* frame fill color */
   --stampstack-card-bg: #fff;           /* inner paper color */
+  --stampstack-text: #2a2b32;           /* default content text color (inherited; flips in dark) */
   --stampstack-radius: 21px;            /* inner content-area corner radius */
   --stampstack-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --stampstack-perspective: 1200px;
@@ -66,6 +67,9 @@
   border-radius: var(--stampstack-radius);
   background: var(--stampstack-card-bg, #fff);
   border: 2px solid var(--stampstack-frame, #295df6);
+  /* Default text color, inherited by renderStamp content that doesn't set its own.
+     Flips with the theme so plain text just works in dark mode; override anytime. */
+  color: var(--stampstack-text, #2a2b32);
 }
 
 /* ── Opt-in dark theme ──────────────────────────────────────────────────
@@ -77,6 +81,7 @@
 .stampstack[data-theme='dark'],
 [data-theme='dark'] .stampstack {
   --stampstack-card-bg: #1c1d24;          /* elevated charcoal "paper" */
+  --stampstack-text: #ececf1;             /* light text so inherited content flips automatically */
 }
 
 .stampstack[data-theme='dark'] .stampstack-content,

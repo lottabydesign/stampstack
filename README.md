@@ -52,6 +52,7 @@ Import `stampstack/styles.css` for the frame, then override CSS variables:
 .stampstack {
   --stampstack-frame: hotpink;                            /* frame fill color */
   --stampstack-card-bg: #fff;            /* inner paper color */
+  --stampstack-text: #2a2b32;            /* default content text color (inherited; flips in dark) */
   --stampstack-radius: 16px;                              /* inner content corner radius */
   --stampstack-ease: cubic-bezier(0.34, 1.56, 0.64, 1);  /* the snap transition curve */
   --stampstack-perspective: 800px;                        /* 3D depth (smaller = more dramatic) */
@@ -69,10 +70,11 @@ or your app's theme wrapper) to switch the stamp's paper to a dark surface:
 <body data-theme="dark"> … </body>
 ```
 
-It themes the **paper** (to an elevated charcoal); the frame color still comes from
-`--stampstack-frame` or the per-stamp `frameColor` prop. Your `renderStamp` content is
-yours to make light. Override `--stampstack-card-bg` under the dark selector if you want
-a different dark surface.
+It themes the **paper** (to an elevated charcoal) and flips the default **text color**
+to light — so any `renderStamp` text that doesn't hard-code its own `color` inherits it
+and adapts automatically. Text you explicitly color stays as you set it. The frame color
+still comes from `--stampstack-frame` or the per-stamp `frameColor` prop. Override
+`--stampstack-card-bg` / `--stampstack-text` under the dark selector to customize.
 
 ## Controls
 
