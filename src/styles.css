@@ -13,7 +13,9 @@
   align-items: center;
   justify-content: center;
   height: 24rem;
-  overflow: hidden;
+  /* No clipping — the fan extends beyond this box on both sides by design.
+     Wrap <StampStack> in your own overflow-clipping container if you need it bounded. */
+  overflow: visible;
 }
 
 .stampstack-scene {
