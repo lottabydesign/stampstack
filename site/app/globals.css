@@ -24,6 +24,7 @@ html, body {
   font-family: var(--font-ui);
   font-size: 15px;
   line-height: 1.6;
+  letter-spacing: -0.014em; /* tight tracking on UI/body type */
   -webkit-font-smoothing: antialiased;
   /* The hero fan uses overflow:visible and spreads wider than the viewport;
      clip the page horizontally so it runs off-screen without a scrollbar. */
@@ -53,9 +54,14 @@ a:hover { text-decoration: underline; }
 .section-label {
   font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.005em;
   color: var(--muted);
   margin: 0 0 14px;
+}
+
+/* Monospace must keep normal tracking — negative letter-spacing wrecks code. */
+code, pre, .code-card pre, .code-card code {
+  letter-spacing: normal;
 }
 
 /* Code cards (Shiki output lives inside .code-card). */
