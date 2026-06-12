@@ -10,6 +10,7 @@ export function Hero() {
           width (= cardWidth) and center it in a wider clipping container; the fan
           then spreads symmetrically and clips cleanly at both edges. */}
       <div
+        className="rise"
         style={{
           position: 'relative',
           overflow: 'visible',
@@ -42,20 +43,20 @@ export function Hero() {
           )}
         />
       </div>
-      <span style={{ display: 'block', marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>
+      <span className="rise" style={{ display: 'block', marginTop: 8, fontSize: 13, color: 'var(--muted)', animationDelay: '80ms' }}>
         ← drag the fan →
       </span>
 
-      <h1 style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.04em', margin: '28px 0 10px' }}>
+      <h1 className="rise" style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.04em', margin: '28px 0 10px', animationDelay: '120ms' }}>
         stampstack
       </h1>
-      <p style={{ fontSize: 17, color: '#555', margin: '0 0 8px' }}>
+      <p className="rise" style={{ fontSize: 17, color: '#555', margin: '0 0 8px', animationDelay: '160ms' }}>
         A draggable 3D coverflow of postage-stamp cards. Bring your own content.
       </p>
-      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 16px' }}>
+      <p className="rise" style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 16px', animationDelay: '200ms' }}>
         Zero deps · ~5KB · React 18+
       </p>
-      <p style={{ fontSize: 14, display: 'flex', gap: 14, justifyContent: 'center' }}>
+      <p className="rise" style={{ fontSize: 14, display: 'flex', gap: 14, justifyContent: 'center', animationDelay: '240ms' }}>
         <a href="https://github.com/lottabydesign/stampstack">GitHub</a>
         <a href="https://www.npmjs.com/package/stampstack">npm</a>
         <a href="https://github.com/lottabydesign">@lottabydesign</a>

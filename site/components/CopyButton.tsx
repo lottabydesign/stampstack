@@ -5,6 +5,7 @@ export function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <button
+      className="ss-tap"
       onClick={async () => {
         await navigator.clipboard.writeText(text)
         setCopied(true)
@@ -16,7 +17,7 @@ export function CopyButton({ text }: { text: string }) {
         right: 10,
         border: '1px solid var(--border)',
         background: 'var(--bg)',
-        color: 'var(--muted)',
+        color: copied ? 'var(--accent)' : 'var(--muted)',
         borderRadius: 7,
         padding: '4px 9px',
         fontSize: 12,

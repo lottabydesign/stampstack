@@ -17,6 +17,7 @@ export function InstallTabs() {
         {Object.keys(COMMANDS).map((key) => (
           <button
             key={key}
+            className="ss-tab"
             onClick={() => setPm(key as keyof typeof COMMANDS)}
             style={{
               border: 'none',
@@ -33,7 +34,7 @@ export function InstallTabs() {
           </button>
         ))}
       </div>
-      <div className="code-card">
+      <div className="code-card lift">
         <pre>
           <code style={{ color: 'var(--text)' }}>$ {COMMANDS[pm]}</code>
         </pre>

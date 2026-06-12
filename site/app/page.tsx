@@ -1,5 +1,6 @@
 import { Hero } from '@/components/Hero'
 import { Section } from '@/components/Section'
+import { Reveal } from '@/components/Reveal'
 import { InstallTabs } from '@/components/InstallTabs'
 import { CodeBlock } from '@/components/CodeBlock'
 import { PropsTable } from '@/components/PropsTable'
@@ -36,26 +37,36 @@ export default function Home() {
     <main>
       <Hero />
 
-      <Section label="Install">
-        <InstallTabs />
-      </Section>
+      <Reveal>
+        <Section label="Install">
+          <InstallTabs />
+        </Section>
+      </Reveal>
 
-      <Section label="Usage">
-        <CodeBlock code={USAGE} lang="tsx" />
-      </Section>
+      <Reveal>
+        <Section label="Usage">
+          <CodeBlock code={USAGE} lang="tsx" />
+        </Section>
+      </Reveal>
 
-      <Section label="Props">
-        <PropsTable />
-      </Section>
+      <Reveal>
+        <Section label="Props">
+          <PropsTable />
+        </Section>
+      </Reveal>
 
-      <Section label="Theming & dark mode">
-        <CodeBlock code={THEMING} lang="css" />
-        <div style={{ marginTop: 16 }}>
-          <ThemeDemo />
-        </div>
-      </Section>
+      <Reveal>
+        <Section label="Theming & dark mode">
+          <CodeBlock code={THEMING} lang="css" />
+          <div style={{ marginTop: 16 }}>
+            <ThemeDemo />
+          </div>
+        </Section>
+      </Reveal>
 
-      <Footer />
+      <Reveal>
+        <Footer />
+      </Reveal>
     </main>
   )
 }

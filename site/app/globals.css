@@ -82,3 +82,57 @@ code, pre, .code-card pre, .code-card code {
   line-height: 1.55;
 }
 .code-card code { font-family: var(--font-mono); }
+
+/* ── Micro-interactions ─────────────────────────────────────────────────
+   Emil Kowalski principles: purposeful, fast, ease-out, transform/opacity
+   only, and disabled under prefers-reduced-motion. Interactive elements keep
+   their inline base styles; these classes add transitions + hover/press. */
+
+/* easeOutQuint — snappy, slight settle. */
+:root { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Tactile buttons (Copy, theme toggle): smooth state changes + press feedback. */
+.ss-tap {
+  transition:
+    transform 0.14s var(--ease),
+    box-shadow 0.2s ease,
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+/* Tabs: animate the active-color switch + a tiny press. */
+.ss-tab { transition: color 0.18s ease, opacity 0.18s ease; }
+
+/* Links fade slightly on hover. */
+a { transition: opacity 0.16s ease, color 0.18s ease; }
+
+/* Code/demo cards lift a hair on hover. */
+.lift { transition: transform 0.2s var(--ease), box-shadow 0.2s ease; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ss-tap:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+  .ss-tap:active { transform: scale(0.95); box-shadow: none; }
+  .ss-tab:hover { opacity: 0.65; }
+  .ss-tab:active { transform: scale(0.94); }
+  a:hover { opacity: 0.65; }
+  .lift:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06); }
+}
+
+/* Scroll-reveal: fade + rise as a section enters the viewport. */
+.reveal { opacity: 0; transform: translateY(14px); }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Hero entrance: rise + fade on load (staggered via inline animation-delay). */
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: ss-rise 0.7s var(--ease) both; }
+}
+@keyframes ss-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}

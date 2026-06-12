@@ -19,6 +19,7 @@ export function ThemeDemo() {
     >
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
         <button
+          className="ss-tap"
           onClick={() => setDark((d) => !d)}
           style={{
             border: '1px solid var(--border)',
