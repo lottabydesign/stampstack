@@ -43,11 +43,7 @@ export function Hero() {
           )}
         />
       </div>
-      <span className="rise" style={{ display: 'block', marginTop: 8, fontSize: 13, color: 'var(--muted)', animationDelay: '80ms' }}>
-        ← drag the fan →
-      </span>
-
-      <h1 className="rise" style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.04em', margin: '28px 0 10px', animationDelay: '120ms' }}>
+      <h1 className="rise" style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.04em', margin: '36px 0 10px', animationDelay: '120ms' }}>
         stampstack
       </h1>
       <p
