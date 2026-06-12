@@ -9,7 +9,9 @@
   /* The `, system-ui` fallback inside var() matters: if the next/font variable
      isn't resolved yet, var() would otherwise invalidate font-family → serif. */
   --font-ui: var(--font-open-runde, system-ui), -apple-system, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono, ui-monospace), SFMono-Regular, monospace;
+  /* System code fonts: SF Mono on macOS, the Windows code default elsewhere.
+     Cascadia first (modern, if installed), Consolas as the guaranteed catch-all. */
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
 
   --maxw: 640px;
 }
@@ -49,6 +51,9 @@ main {
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* Button-style links (Figma nav buttons) — no underline / opacity fade. */
+.btn:hover { text-decoration: none; opacity: 1; }
 
 /* The quiet section label — the haptics signature. */
 .section-label {
