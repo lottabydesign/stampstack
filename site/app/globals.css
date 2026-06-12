@@ -83,56 +83,50 @@ code, pre, .code-card pre, .code-card code {
 }
 .code-card code { font-family: var(--font-mono); }
 
-/* ── Micro-interactions ─────────────────────────────────────────────────
-   Emil Kowalski principles: purposeful, fast, ease-out, transform/opacity
-   only, and disabled under prefers-reduced-motion. Interactive elements keep
-   their inline base styles; these classes add transitions + hover/press. */
+/* ── Micro-interactions (Emil Kowalski's framework) ──────────────────────
+   Purposeful, fast (<300ms for feedback), strong ease-out curves,
+   transform/opacity only, press-scale on tap, hover gated to hover-capable
+   devices, gentler opacity-only motion under prefers-reduced-motion. */
 
-/* easeOutQuint — snappy, slight settle. */
-:root { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+:root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); } /* strong ease-out */
 
-/* Tactile buttons (Copy, theme toggle): smooth state changes + press feedback. */
-.ss-tap {
-  transition:
-    transform 0.14s var(--ease),
-    box-shadow 0.2s ease,
-    color 0.18s ease,
-    background-color 0.18s ease,
-    border-color 0.18s ease;
-}
-/* Tabs: animate the active-color switch + a tiny press. */
-.ss-tab { transition: color 0.18s ease, opacity 0.18s ease; }
-
-/* Links fade slightly on hover. */
+/* Smooth state changes (color/bg swaps animate via the transition). */
+.ss-tap { transition: transform 0.14s var(--ease-out), box-shadow 0.2s ease, color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
+.ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
 a { transition: opacity 0.16s ease, color 0.18s ease; }
+.lift { transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease; }
 
-/* Code/demo cards lift a hair on hover. */
-.lift { transition: transform 0.2s var(--ease), box-shadow 0.2s ease; }
-
+/* Press feedback — every pointer type, motion-safe. */
 @media (prefers-reduced-motion: no-preference) {
+  .ss-tap:active { transform: scale(0.97); box-shadow: none; }
+  .ss-tab:active { transform: scale(0.95); }
+}
+
+/* Hover — only true hover devices, so taps on touch don't trigger it. */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .ss-tap:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
-  .ss-tap:active { transform: scale(0.95); box-shadow: none; }
-  .ss-tab:hover { opacity: 0.65; }
-  .ss-tab:active { transform: scale(0.94); }
-  a:hover { opacity: 0.65; }
+  .ss-tab:hover { opacity: 0.6; }
+  a:hover { opacity: 0.6; }
   .lift:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06); }
 }
 
-/* Scroll-reveal: fade + rise as a section enters the viewport. */
+/* Scroll-reveal: fade + rise into view (one-shot via IntersectionObserver). */
 .reveal { opacity: 0; transform: translateY(14px); }
 .reveal.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: no-preference) {
-  .reveal { transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+  .reveal { transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out); }
 }
+/* Reduced motion: keep the fade (aids comprehension), drop the movement. */
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; }
+  .reveal { transform: none; transition: opacity 0.3s ease; }
 }
 
 /* Hero entrance: rise + fade on load (staggered via inline animation-delay). */
 @media (prefers-reduced-motion: no-preference) {
-  .rise { animation: ss-rise 0.7s var(--ease) both; }
+  .rise { animation: ss-rise 0.55s var(--ease-out) both; }
 }
-@keyframes ss-rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: ss-fade 0.3s ease both; }
 }
+@keyframes ss-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes ss-fade { from { opacity: 0; } to { opacity: 1; } }
