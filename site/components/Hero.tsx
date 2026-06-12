@@ -51,10 +51,10 @@ export function Hero() {
         stampstack
       </h1>
       <p className="rise" style={{ fontSize: 17, color: '#555', margin: '0 0 8px', animationDelay: '160ms' }}>
-        A draggable 3D coverflow of postage-stamp cards. Bring your own content.
+        A draggable 3D coverflow of postage-stamp cards for React.
       </p>
       <p className="rise" style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 16px', animationDelay: '200ms' }}>
-        Zero deps · ~5KB · React 18+
+        Real DOM, bring your own content, no dependencies beyond React 18, ~5KB.
       </p>
       <p className="rise" style={{ fontSize: 14, display: 'flex', gap: 14, justifyContent: 'center', animationDelay: '240ms' }}>
         <a href="https://github.com/lottabydesign/stampstack">GitHub</a>
