@@ -12,16 +12,16 @@ export function Hero() {
       <div
         style={{
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           display: 'flex',
           justifyContent: 'center',
         }}
       >
         <StampStack
           items={DEMO_ITEMS}
-          cardWidth={190}
+          cardWidth={240}
           initialIndex={Math.floor(DEMO_ITEMS.length / 2)}
-          style={{ width: 190, height: 320 }}
+          style={{ width: 240, height: 340 }}
           frameColor={(item) => demoColor(item.id)}
           onSelect={(item) => window.alert(`Tapped ${item.label}`)}
           renderStamp={(item, state) => (

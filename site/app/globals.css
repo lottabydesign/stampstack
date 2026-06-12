@@ -1,5 +1,5 @@
 :root {
-  --bg: #fafafa;
+  --bg: #ffffff;
   --card: #ffffff;
   --text: #333333;
   --muted: #8a8a8a;
@@ -25,6 +25,9 @@ html, body {
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* The hero fan uses overflow:visible and spreads wider than the viewport;
+     clip the page horizontally so it runs off-screen without a scrollbar. */
+  overflow-x: clip;
 }
 
 /* A thin gradient hairline along the very top — the one playful accent. */
