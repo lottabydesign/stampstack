@@ -34,7 +34,7 @@ export function InstallTabs() {
           </button>
         ))}
       </div>
-      <div className="code-card lift">
+      <div className="code-card">
         <pre>
           <code style={{ color: 'var(--text)' }}>$ {COMMANDS[pm]}</code>
         </pre>

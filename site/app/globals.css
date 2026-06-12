@@ -94,7 +94,6 @@ code, pre, .code-card pre, .code-card code {
 .ss-tap { transition: transform 0.14s var(--ease-out), box-shadow 0.2s ease, color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
 .ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
 a { transition: opacity 0.16s ease, color 0.18s ease; }
-.lift { transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease; }
 
 /* Press feedback — every pointer type, motion-safe. */
 @media (prefers-reduced-motion: no-preference) {
@@ -107,7 +106,6 @@ a { transition: opacity 0.16s ease, color 0.18s ease; }
   .ss-tap:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
   .ss-tab:hover { opacity: 0.6; }
   a:hover { opacity: 0.6; }
-  .lift:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06); }
 }
 
 /* Scroll-reveal: fade + rise into view (one-shot via IntersectionObserver). */
