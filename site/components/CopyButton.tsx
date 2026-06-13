@@ -16,11 +16,11 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
         right: 10,
         // `center` (single-line boxes like Install) vertically centers via the
         // .copy-center class; otherwise pin to the top (multi-line code blocks).
-        ...(center ? {} : { top: 10 }),
-        border: '1px solid var(--border)',
-        background: 'var(--bg)',
-        borderRadius: 7,
-        padding: '4px 9px',
+        ...(center ? {} : { top: 14 }),
+        // Text-only: no box (border/background/radius/padding stripped).
+        border: 'none',
+        background: 'none',
+        padding: 0,
         fontSize: 12,
         fontFamily: 'var(--font-ui)',
         cursor: 'pointer',
