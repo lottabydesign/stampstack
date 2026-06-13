@@ -5,7 +5,7 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
   const [copied, setCopied] = useState(false)
   return (
     <button
-      className={center ? 'ss-tap copy-center' : 'ss-tap'}
+      className={`copy-btn${copied ? ' is-copied' : ''}${center ? ' copy-center' : ''}`}
       onClick={async () => {
         await navigator.clipboard.writeText(text)
         setCopied(true)
@@ -19,7 +19,6 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
         ...(center ? {} : { top: 10 }),
         border: '1px solid var(--border)',
         background: 'var(--bg)',
-        color: copied ? 'var(--accent)' : 'var(--muted)',
         borderRadius: 7,
         padding: '4px 9px',
         fontSize: 12,
@@ -28,7 +27,10 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
       }}
       aria-label="Copy to clipboard"
     >
-      {copied ? 'Copied' : 'Copy'}
+      {/* keyed so the label remounts and the ease-in animation replays on toggle */}
+      <span key={copied ? 'copied' : 'copy'} className="copy-label">
+        {copied ? 'Copied' : 'Copy'}
+      </span>
     </button>
   )
 }

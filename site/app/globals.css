@@ -135,12 +135,39 @@ a { transition: opacity 0.16s ease, color 0.18s ease; }
 @keyframes ss-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes ss-fade { from { opacity: 0; } to { opacity: 1; } }
 
-/* Vertically-centered Copy button (single-line code boxes like Install).
-   Transforms compose with the centering so hover/press don't reset it. */
-.copy-center { top: 50%; transform: translateY(-50%); }
-@media (prefers-reduced-motion: no-preference) {
-  .copy-center:active { transform: translateY(-50%) scale(0.97); }
+/* Copy buttons: no lift, no shadow. Hover darkens the text; the "Copied"
+   label eases in on click. */
+.copy-btn {
+  color: var(--muted);
+  transition: color 0.18s ease-in;
 }
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .copy-center:hover { transform: translateY(-50%) translateY(-1px); }
+@media (hover: hover) and (pointer: fine) {
+  .copy-btn:hover {
+    color: var(--text);
+  }
+}
+.copy-btn.is-copied {
+  color: var(--accent);
+}
+.copy-label {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .copy-label {
+    animation: copy-in 0.2s ease-in;
+  }
+}
+@keyframes copy-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Vertically-centered Copy button in single-line boxes (Install). */
+.copy-center {
+  top: 50%;
+  transform: translateY(-50%);
 }
