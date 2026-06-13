@@ -41,12 +41,13 @@ body::before {
   height: 3px;
   background: linear-gradient(90deg, #295df6, #c6a0fd, #5cd500, #ff7a45, #ff3e8c, #00c9a7);
   z-index: 100;
+  backdrop-filter: blur(100px);
 }
 
 main {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 0 20px 120px;
+  padding: 0 20px 40px;
 }
 
 a { color: var(--accent); text-decoration: none; }
