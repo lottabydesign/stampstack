@@ -105,7 +105,17 @@ export function Footer() {
             color: '#484747',
           }}
         >
-          <span>© {year} Made by Lota</span>
+          <span>
+            © {year} Made by{' '}
+            <a
+              href="https://x.com/lottabydesign"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'inherit', textDecoration: 'underline' }}
+            >
+              Lota
+            </a>
+          </span>
           <span style={{ textAlign: 'right' }}>Last updated: {lastUpdated}</span>
         </div>
       </div>
