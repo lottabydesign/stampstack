@@ -1,48 +1,60 @@
 'use client'
-import type { CSSProperties } from 'react'
 import { StampStack } from 'stampstack'
 import { DEMO_ITEMS, demoColor } from './demo-stamps'
-
-// Button styles mirrored 1:1 from Figma (node 1704:513).
-const btnBase: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: 9,
-  height: 36,
-  padding: '8px 16px',
-  borderRadius: 11,
-  fontFamily: 'var(--font-ui)',
-  fontWeight: 500,
-  fontSize: 14,
-  letterSpacing: '-0.5px',
-  lineHeight: '20px',
-  whiteSpace: 'nowrap',
-}
-const primaryBtn: CSSProperties = { ...btnBase, background: '#171717', color: '#fafafa', border: '1px solid #171717' }
-const secondaryBtn: CSSProperties = { ...btnBase, background: '#fafafa', color: '#0a0a0a', border: '1px solid #e5e5e5' }
 
 export function Hero() {
   return (
     <header style={{ paddingTop: 36, textAlign: 'left' }}>
+     
+      <div style={{ marginBottom: 48 }}>
+        {/* Logo → (wordmark + GitHub badge) → description */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 11 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="rise"
+            src="/icons/stampstack-logo.svg"
+            alt="stampstack"
+            width={30}
+            height={51.8}
+            style={{ display: 'block', animationDelay: '120ms' }}
+          />
+
+          {/* Wordmark + GitHub badge share one full-width row: align-items:center
+              vertically centers the badge on the wordmark, and marginLeft:auto
+              pins it to the content's right edge. */}
+          <div
+            className="rise"
+            style={{ display: 'flex', alignItems: 'center', alignSelf: 'stretch', whiteSpace: 'nowrap', marginTop: -10, animationDelay: '160ms' }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#484747', fontWeight: 500 }}>
+              <span style={{ fontSize: 18, fontWeight: 700, lineHeight: '44px', letterSpacing: '-0.8px', opacity: 0.92 }}>stampstack</span>
+              <span style={{ fontSize: 14, lineHeight: '24px', letterSpacing: '-0.1px', opacity: 0.22 }}>v0.2.0</span>
+            </span>
+            <a
+              className="ss-tap"
+              href="https://github.com/lottabydesign/stampstack"
+              aria-label="stampstack on GitHub"
+              style={{ marginLeft: 'auto', display: 'inline-flex' }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/github-badge.svg" alt="" width={24.949} height={24.949} style={{ display: 'block' }} />
+            </a>
+          </div>
+
+          <p
+            className="rise"
+            style={{ margin: 0, maxWidth: 486, color: '#252525', fontWeight: 500, fontSize: 14, letterSpacing: '-0.1px', lineHeight: '23px', fontFeatureSettings: '"swsh" 1', animationDelay: '200ms' }}
+          >
+            stampstack is a postage-styled 3D carousel component. Install and drop in whatever content you want on the stamps.
+            no dependencies beyond React 18.
+          </p>
+        </div>
+      </div>
+
       {/* Live, draggable fan — the product is the hero. The library places the
           focused card at the left of its root, so we give StampStack a narrow
           width (= cardWidth) and center it in a wider clipping container; the fan
           then spreads symmetrically and clips cleanly at both edges. */}
-      
-      <h1 className="rise" style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-0.04em', margin: '36px 0 10px', animationDelay: '120ms' }}>
-        stampstack
-      </h1>
-      <p
-        className="rise"
-        style={{ fontSize: 14, fontWeight: 500, color: '#464646', maxWidth: 460, margin: '0 0 48px', animationDelay: '160ms' }}
-      >
-        stampstack is a postage-styled 3D carousel component. Install and drop in whatever content you want on the stamps. 
-        no dependencies beyond React 18.
-        
-      </p>
-   
-      
       <div
         className="rise"
         style={{
@@ -76,23 +88,6 @@ export function Hero() {
             </div>
           )}
         />
-      </div>
-      <div className="rise" style={{ display: 'flex', gap: 12, justifyContent: 'flex-start', flexWrap: 'wrap', animationDelay: '240ms' }}>
-        <a className="btn ss-tap" href="https://github.com/lottabydesign/stampstack" style={primaryBtn}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/github.svg" alt="" width={14} height={13.5} />
-          Star on GitHub
-        </a>
-        <a className="btn ss-tap" href="https://github.com/lottabydesign/stampstack#readme" style={secondaryBtn}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/book-open.svg" alt="" width={14} height={14} />
-          View docs
-        </a>
-        <a className="btn ss-tap" href="https://x.com/lottabydesign" style={secondaryBtn}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/x.svg" alt="" width={12} height={12} />
-          Follow
-        </a>
       </div>
     </header>
   )

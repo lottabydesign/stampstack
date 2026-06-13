@@ -3,8 +3,8 @@
   --card: #ffffff;
   --text: #333333;
   --muted: #8a8a8a;
-  --border: #ececec;
-  --accent: #295df6;
+  --border: #E5E5E5;
+  --accent: #1a1a1a; /* dark neutral — no blue accent text */
 
   /* The `, system-ui` fallback inside var() matters: if the next/font variable
      isn't resolved yet, var() would otherwise invalidate font-family → serif. */
@@ -13,7 +13,7 @@
      Cascadia first (modern, if installed), Consolas as the guaranteed catch-all. */
   --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
 
-  --maxw: 640px;
+  --maxw: 560px;
 }
 
 * { box-sizing: border-box; }
@@ -33,20 +33,26 @@ html, body {
   overflow-x: clip;
 }
 
-/* A thin gradient hairline along the very top — the one playful accent. */
+/* A soft, blurred rainbow wash across the very top — the one playful accent.
+   Figma treatment (node 1787:9551): a ~13px band heavily blurred (33px) and
+   dropped to 20% opacity, so the brand rainbow blooms into a pastel glow.
+   pointer-events:none so the bleed never blocks clicks on the header below. */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 14px;
   background: linear-gradient(90deg, #295df6, #c6a0fd, #5cd500, #ff7a45, #ff3e8c, #00c9a7);
+  filter: blur(33px);
+  opacity: 0.2;
+  pointer-events: none;
   z-index: 100;
 }
 
 main {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 0 20px 120px;
+  padding: 0 20px 30px;
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -55,12 +61,23 @@ a:hover { text-decoration: underline; }
 /* Button-style links (Figma nav buttons) — no underline / opacity fade. */
 .btn:hover { text-decoration: none; opacity: 1; }
 
+/* Quiet inline links (footer) — sit in the surrounding grey at rest, darken on
+   hover via the a:hover rule. Color lives here (not inline) so :hover can win. */
+.link-quiet { color: inherit; text-decoration: underline; }
+
+/* Byline link (the name) — same quiet grey + hover-darken, but never underlined.
+   The :hover rule overrides the base a:hover underline (equal specificity, later wins). */
+.link-plain { color: inherit; }
+/* Base text here (#484747) is already dark, so var(--text) barely reads as a
+   change. Darken to the brand's darkest neutral (#1a1a1a) for a visible hover. */
+.link-plain:hover { color: var(--accent); text-decoration: none; }
+
 /* The quiet section label — the haptics signature. */
 .section-label {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.005em;
-  color: var(--muted);
+  color: #252525; /* match the Outro label (Footer.tsx) */
   margin: 0 0 14px;
 }
 
@@ -74,13 +91,17 @@ code, pre, .code-card pre, .code-card code {
   position: relative;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
 }
 .code-card pre {
   margin: 0;
   padding: 16px 18px;
-  overflow-x: auto;
+  /* Reflow long lines inside the box instead of scrolling sideways:
+     pre-wrap keeps indentation + intentional breaks but wraps when too wide;
+     break-word lets a single long token (e.g. a path) break rather than overflow. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   background: var(--card) !important;
   font-family: var(--font-mono);
   font-size: 13.5px;
@@ -96,21 +117,26 @@ code, pre, .code-card pre, .code-card code {
 :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); } /* strong ease-out */
 
 /* Smooth state changes (color/bg swaps animate via the transition). */
-.ss-tap { transition: transform 0.14s var(--ease-out), box-shadow 0.2s ease, color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
-.ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
+.ss-tap { transition: transform 0.14s var(--ease-out), color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
+.ss-tab { color: var(--muted); transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
+.ss-tab.is-active { color: var(--text); } /* selected tab — colored via class so :hover can win */
 a { transition: opacity 0.16s ease, color 0.18s ease; }
 
-/* Press feedback — every pointer type, motion-safe. */
-@media (prefers-reduced-motion: no-preference) {
-  .ss-tap:active { transform: scale(0.97); box-shadow: none; }
-  .ss-tab:active { transform: scale(0.95); }
+/* Hover — only true hover devices, so taps on touch don't trigger it.
+   MUST come before :active below — equal specificity means source order wins,
+   so :active needs to be last to override the hover scale during a press. */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .ss-tap:hover { transform: scale(1.02); }
+  /* Darken on hover (toward the main text color), not fade — matches the Copy button. */
+  .ss-tab:hover { color: var(--text); }
+  a:hover { color: var(--text); }
 }
 
-/* Hover — only true hover devices, so taps on touch don't trigger it. */
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .ss-tap:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
-  .ss-tab:hover { opacity: 0.6; }
-  a:hover { opacity: 0.6; }
+/* Press feedback — every pointer type, motion-safe. Last so it wins over :hover
+   when the pointer is both hovering and pressing (the LVHA cascade order). */
+@media (prefers-reduced-motion: no-preference) {
+  .ss-tap:active { transform: scale(0.97); }
+  .ss-tab:active { transform: scale(0.95); }
 }
 
 /* Scroll-reveal: fade + rise into view (one-shot via IntersectionObserver). */
@@ -133,3 +159,40 @@ a { transition: opacity 0.16s ease, color 0.18s ease; }
 }
 @keyframes ss-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes ss-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Copy buttons: no lift, no shadow. Hover darkens the text; the "Copied"
+   label eases in on click. */
+.copy-btn {
+  color: var(--muted);
+  transition: color 0.18s ease-in;
+}
+@media (hover: hover) and (pointer: fine) {
+  .copy-btn:hover {
+    color: var(--text);
+  }
+}
+.copy-btn.is-copied {
+  color: var(--accent);
+}
+.copy-label {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .copy-label {
+    animation: copy-in 0.2s ease-in;
+  }
+}
+@keyframes copy-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Vertically-centered Copy button in single-line boxes (Install). */
+.copy-center {
+  top: 50%;
+  transform: translateY(-50%);
+}

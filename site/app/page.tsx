@@ -2,6 +2,7 @@ import { Hero } from '@/components/Hero'
 import { Section } from '@/components/Section'
 import { Reveal } from '@/components/Reveal'
 import { InstallTabs } from '@/components/InstallTabs'
+import { ActionButtons } from '@/components/ActionButtons'
 import { CodeBlock } from '@/components/CodeBlock'
 import { Footer } from '@/components/Footer'
 
@@ -27,8 +28,9 @@ export default function Home() {
       <Hero />
 
       <Reveal>
-        <Section label="Install">
+        <Section label="Install" marginTop={32}>
           <InstallTabs />
+          <ActionButtons />
         </Section>
       </Reveal>
 

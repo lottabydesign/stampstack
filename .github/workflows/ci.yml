@@ -1,0 +1,45 @@
+name: CI
+
+# Run on pushes to main and on every pull request targeting main,
+# so PRs are validated before merge.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # The library lives at the repo root: typecheck, run the vitest suite, build.
+  library:
+    name: Library (typecheck · test · build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  # The docs site lives in /site and consumes the published stampstack from npm,
+  # so it builds independently of the library job. No tests here — typecheck + build.
+  site:
+    name: Site (typecheck · build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
