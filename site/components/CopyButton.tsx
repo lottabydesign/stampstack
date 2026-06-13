@@ -13,7 +13,8 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
       }}
       style={{
         position: 'absolute',
-        right: 10,
+        // Match the code's 18px horizontal padding so left/right inset reads even.
+        right: 18,
         // `center` (single-line boxes like Install) vertically centers via the
         // .copy-center class; otherwise pin to the top (multi-line code blocks).
         ...(center ? {} : { top: 14 }),
@@ -21,7 +22,9 @@ export function CopyButton({ text, center = false }: { text: string; center?: bo
         border: 'none',
         background: 'none',
         padding: 0,
-        fontSize: 12,
+        // Match the inactive Install tabs: 13px / weight 500 / muted (color via .copy-btn).
+        fontSize: 13,
+        fontWeight: 500,
         fontFamily: 'var(--font-ui)',
         cursor: 'pointer',
       }}
