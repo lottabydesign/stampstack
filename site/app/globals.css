@@ -3,7 +3,7 @@
   --card: #ffffff;
   --text: #333333;
   --muted: #8a8a8a;
-  --border: #ececec;
+  --border: #E5E5E5;
   --accent: #1a1a1a; /* dark neutral — no blue accent text */
 
   /* The `, system-ui` fallback inside var() matters: if the next/font variable
@@ -80,7 +80,7 @@ code, pre, .code-card pre, .code-card code {
   position: relative;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
 }
 .code-card pre {
@@ -106,19 +106,19 @@ code, pre, .code-card pre, .code-card code {
 :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); } /* strong ease-out */
 
 /* Smooth state changes (color/bg swaps animate via the transition). */
-.ss-tap { transition: transform 0.14s var(--ease-out), box-shadow 0.2s ease, color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
+.ss-tap { transition: transform 0.14s var(--ease-out), color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
 .ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
 a { transition: opacity 0.16s ease, color 0.18s ease; }
 
 /* Press feedback — every pointer type, motion-safe. */
 @media (prefers-reduced-motion: no-preference) {
-  .ss-tap:active { transform: scale(0.97); box-shadow: none; }
+  .ss-tap:active { transform: scale(0.97); }
   .ss-tab:active { transform: scale(0.95); }
 }
 
 /* Hover — only true hover devices, so taps on touch don't trigger it. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .ss-tap:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+  .ss-tap:hover { transform: scale(1.02); }
   .ss-tab:hover { opacity: 0.6; }
   a:hover { opacity: 0.6; }
 }
