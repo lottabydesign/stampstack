@@ -68,7 +68,9 @@ a:hover { text-decoration: underline; }
 /* Byline link (the name) — same quiet grey + hover-darken, but never underlined.
    The :hover rule overrides the base a:hover underline (equal specificity, later wins). */
 .link-plain { color: inherit; }
-.link-plain:hover { text-decoration: none; }
+/* Base text here (#484747) is already dark, so var(--text) barely reads as a
+   change. Darken to the brand's darkest neutral (#1a1a1a) for a visible hover. */
+.link-plain:hover { color: var(--accent); text-decoration: none; }
 
 /* The quiet section label — the haptics signature. */
 .section-label {
