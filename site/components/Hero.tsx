@@ -1,8 +1,12 @@
 'use client'
+import { useState } from 'react'
 import { StampStack } from 'stampstack'
-import { DEMO_ITEMS, demoColor } from './demo-stamps'
+import { DEMO_ITEMS, demoColor, type DemoItem } from './demo-stamps'
+import { StampToast } from './StampToast'
 
 export function Hero() {
+  // The stamp tapped most recently — drives the toast (null = no toast shown).
+  const [toast, setToast] = useState<DemoItem | null>(null)
   return (
     <header style={{ paddingTop: 36, textAlign: 'left' }}>
      
@@ -45,8 +49,8 @@ export function Hero() {
             className="rise"
             style={{ margin: 0, maxWidth: 486, color: '#252525', fontWeight: 500, fontSize: 14, letterSpacing: '-0.1px', lineHeight: '23px', fontFeatureSettings: '"swsh" 1', animationDelay: '200ms' }}
           >
-            stampstack is a postage-styled 3D carousel component. Install and drop in whatever content you want on the stamps.
-            no dependencies beyond React 18.
+           stampstack is a postage-styled 3D carousel component. 
+           drag or flick the fan · arrow keys move focus · tap a stamp to open 
           </p>
         </div>
       </div>
@@ -69,7 +73,7 @@ export function Hero() {
           cardWidth={240}
           style={{ width: 240, height: 340 }}
           frameColor={(item) => demoColor(item.id)}
-          onSelect={(item) => window.alert(`Tapped ${item.label}`)}
+          onSelect={(item) => setToast(item)}
           renderStamp={(item, state) => (
             <div
               style={{
@@ -84,11 +88,22 @@ export function Hero() {
                 opacity: state.focused ? 1 : 0.85,
               }}
             >
-              {item.label}
+              {item.title}
             </div>
           )}
         />
       </div>
+
+      {/* Tap a stamp → toast with its swatch color + title + subtitle. Keyed by id
+          so tapping a different stamp re-mounts and replays the enter animation. */}
+      {toast && (
+        <StampToast
+          key={toast.id}
+          item={toast}
+          color={demoColor(toast.id)}
+          onRemove={() => setToast(null)}
+        />
+      )}
     </header>
   )
 }
