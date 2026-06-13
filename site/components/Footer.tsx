@@ -1,4 +1,15 @@
 export function Footer() {
+  // Server component → these evaluate at build time, so "Last updated" reflects
+  // the most recent deploy and auto-advances on every build.
+  const now = new Date()
+  const year = now.getFullYear()
+  const lastUpdated = now.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+
   return (
     <footer
       style={{
@@ -94,8 +105,8 @@ export function Footer() {
             color: '#484747',
           }}
         >
-          <span>© 2026 Made by Lota</span>
-          <span style={{ textAlign: 'right' }}>Last updated: June 13, 2026</span>
+          <span>© {year} Made by Lota</span>
+          <span style={{ textAlign: 'right' }}>Last updated: {lastUpdated}</span>
         </div>
       </div>
     </footer>
