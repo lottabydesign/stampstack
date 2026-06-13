@@ -9,11 +9,17 @@ const COMMANDS: Record<string, string> = {
   bun: 'bun add stampstack',
 }
 
-// Copy-this-to-your-agent prompt (react-grab style).
-const PROMPT = `Set up stampstack in this React project.
+// Copy-this-to-your-agent prompt (react-grab style). Written to handle any
+// starting point — empty directory, fresh scaffold, or existing React project.
+const PROMPT = `Set up stampstack — handle whichever case applies to this directory.
 
-1. Detect the package manager from the lockfile and install stampstack (e.g. npm i stampstack).
-2. Where you use it, import the component and its styles:
+1. Install:
+   - Existing React project: install with the project's package manager. Detect it
+     from the lockfile (package-lock.json → npm, pnpm-lock.yaml → pnpm, yarn.lock → yarn,
+     bun.lockb → bun); if there's no lockfile, use npm. e.g. npm i stampstack
+   - Empty directory (no package.json): scaffold a React app first, then install —
+     npm create vite@latest . -- --template react-ts && npm install && npm i stampstack
+2. Import the component and its styles where you use it:
    import { StampStack } from 'stampstack'
    import 'stampstack/styles.css'
 3. Render it with your data — each item only needs an id:
@@ -21,7 +27,8 @@ const PROMPT = `Set up stampstack in this React project.
 4. Optional: frameColor={(item) => '#...'} for a per-stamp frame color, and
    onSelect={(item) => ...} to open a card on tap.
 
-It renders real DOM (not a canvas), so any content — text, images, links — works inside renderStamp.`
+Works in any React 18+ app (Vite, Next.js, CRA). It renders real DOM (not a canvas),
+so any content — text, images, links — works inside renderStamp.`
 
 const TABS = ['npm', 'pnpm', 'yarn', 'bun', 'Prompt'] as const
 
