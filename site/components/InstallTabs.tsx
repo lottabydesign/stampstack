@@ -35,7 +35,7 @@ export function InstallTabs() {
         {TABS.map((key) => (
           <button
             key={key}
-            className="ss-tab"
+            className={`ss-tab${tab === key ? ' is-active' : ''}`}
             onClick={() => setTab(key)}
             style={{
               border: 'none',
@@ -44,7 +44,6 @@ export function InstallTabs() {
               cursor: 'pointer',
               fontFamily: 'var(--font-ui)',
               fontSize: 13,
-              color: tab === key ? 'var(--text)' : 'var(--muted)',
               fontWeight: tab === key ? 600 : 500,
             }}
           >

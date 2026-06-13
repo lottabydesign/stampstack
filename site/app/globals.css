@@ -61,6 +61,10 @@ a:hover { text-decoration: underline; }
 /* Button-style links (Figma nav buttons) — no underline / opacity fade. */
 .btn:hover { text-decoration: none; opacity: 1; }
 
+/* Quiet inline links (footer) — sit in the surrounding grey at rest, darken on
+   hover via the a:hover rule. Color lives here (not inline) so :hover can win. */
+.link-quiet { color: inherit; text-decoration: underline; }
+
 /* The quiet section label — the haptics signature. */
 .section-label {
   font-size: 13px;
@@ -107,7 +111,8 @@ code, pre, .code-card pre, .code-card code {
 
 /* Smooth state changes (color/bg swaps animate via the transition). */
 .ss-tap { transition: transform 0.14s var(--ease-out), color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; }
-.ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
+.ss-tab { color: var(--muted); transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
+.ss-tab.is-active { color: var(--text); } /* selected tab — colored via class so :hover can win */
 a { transition: opacity 0.16s ease, color 0.18s ease; }
 
 /* Hover — only true hover devices, so taps on touch don't trigger it.
@@ -115,8 +120,9 @@ a { transition: opacity 0.16s ease, color 0.18s ease; }
    so :active needs to be last to override the hover scale during a press. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .ss-tap:hover { transform: scale(1.02); }
-  .ss-tab:hover { opacity: 0.6; }
-  a:hover { opacity: 0.6; }
+  /* Darken on hover (toward the main text color), not fade — matches the Copy button. */
+  .ss-tab:hover { color: var(--text); }
+  a:hover { color: var(--text); }
 }
 
 /* Press feedback — every pointer type, motion-safe. Last so it wins over :hover

@@ -73,10 +73,10 @@ export function Footer() {
               <p style={{ margin: 0, lineHeight: '24px' }}>
                 Drag / flick release behavior adapted from{' '}
                 <a
+                  className="link-quiet"
                   href="https://swiperjs.com/"
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: 'inherit', textDecoration: 'underline' }}
                 >
                   Swiper
                 </a>
@@ -108,10 +108,10 @@ export function Footer() {
           <span>
             © {year} Made by{' '}
             <a
+              className="link-quiet"
               href="https://x.com/lottabydesign"
               target="_blank"
               rel="noreferrer"
-              style={{ color: 'inherit', textDecoration: 'underline' }}
             >
               Lota
             </a>
