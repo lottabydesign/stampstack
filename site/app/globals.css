@@ -13,7 +13,7 @@
      Cascadia first (modern, if installed), Consolas as the guaranteed catch-all. */
   --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
 
-  --maxw: 640px;
+  --maxw: 560px;
 }
 
 * { box-sizing: border-box; }
@@ -33,15 +33,20 @@ html, body {
   overflow-x: clip;
 }
 
-/* A thin gradient hairline along the very top — the one playful accent. */
+/* A soft, blurred rainbow wash across the very top — the one playful accent.
+   Figma treatment (node 1787:9551): a ~13px band heavily blurred (33px) and
+   dropped to 20% opacity, so the brand rainbow blooms into a pastel glow.
+   pointer-events:none so the bleed never blocks clicks on the header below. */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 14px;
   background: linear-gradient(90deg, #295df6, #c6a0fd, #5cd500, #ff7a45, #ff3e8c, #00c9a7);
+  filter: blur(33px);
+  opacity: 0.2;
+  pointer-events: none;
   z-index: 100;
-
 }
 
 main {
@@ -59,9 +64,9 @@ a:hover { text-decoration: underline; }
 /* The quiet section label — the haptics signature. */
 .section-label {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.005em;
-  color: var(--muted);
+  color: #252525; /* match the Outro label (Footer.tsx) */
   margin: 0 0 14px;
 }
 
@@ -81,7 +86,11 @@ code, pre, .code-card pre, .code-card code {
 .code-card pre {
   margin: 0;
   padding: 16px 18px;
-  overflow-x: auto;
+  /* Reflow long lines inside the box instead of scrolling sideways:
+     pre-wrap keeps indentation + intentional breaks but wraps when too wide;
+     break-word lets a single long token (e.g. a path) break rather than overflow. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   background: var(--card) !important;
   font-family: var(--font-mono);
   font-size: 13.5px;
