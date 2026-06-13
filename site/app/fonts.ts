@@ -1,5 +1,4 @@
 import localFont from 'next/font/local'
-import { Geist_Mono } from 'next/font/google'
 
 export const openRunde = localFont({
   src: [
@@ -9,11 +8,5 @@ export const openRunde = localFont({
     { path: './fonts/OpenRunde-Bold.woff', weight: '700', style: 'normal' },
   ],
   variable: '--font-open-runde',
-  display: 'swap',
-})
-
-export const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
   display: 'swap',
 })
