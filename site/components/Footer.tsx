@@ -106,14 +106,14 @@ export function Footer() {
           }}
         >
           <span>
-            © {year} Made by{' '}
+            ©  {year} Made by{' '}
             <a
-              className="link-quiet"
+              className="link-plain"
               href="https://x.com/lottabydesign"
               target="_blank"
               rel="noreferrer"
             >
-              Lota
+              Lota Anidi
             </a>
           </span>
           <span style={{ textAlign: 'right' }}>Last updated: {lastUpdated}</span>

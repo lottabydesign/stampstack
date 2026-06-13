@@ -65,6 +65,11 @@ a:hover { text-decoration: underline; }
    hover via the a:hover rule. Color lives here (not inline) so :hover can win. */
 .link-quiet { color: inherit; text-decoration: underline; }
 
+/* Byline link (the name) — same quiet grey + hover-darken, but never underlined.
+   The :hover rule overrides the base a:hover underline (equal specificity, later wins). */
+.link-plain { color: inherit; }
+.link-plain:hover { text-decoration: none; }
+
 /* The quiet section label — the haptics signature. */
 .section-label {
   font-size: 13px;
