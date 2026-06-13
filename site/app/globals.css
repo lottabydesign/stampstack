@@ -4,7 +4,7 @@
   --text: #333333;
   --muted: #8a8a8a;
   --border: #ececec;
-  --accent: #295df6;
+  --accent: #1a1a1a; /* dark neutral — no blue accent text */
 
   /* The `, system-ui` fallback inside var() matters: if the next/font variable
      isn't resolved yet, var() would otherwise invalidate font-family → serif. */
