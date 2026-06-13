@@ -38,7 +38,7 @@ export function InstallTabs() {
         <pre>
           <code style={{ color: 'var(--text)' }}>$ {COMMANDS[pm]}</code>
         </pre>
-        <CopyButton text={COMMANDS[pm]} />
+        <CopyButton text={COMMANDS[pm]} center />
       </div>
     </div>
   )

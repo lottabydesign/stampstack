@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 
-export function CopyButton({ text }: { text: string }) {
+export function CopyButton({ text, center = false }: { text: string; center?: boolean }) {
   const [copied, setCopied] = useState(false)
   return (
     <button
-      className="ss-tap"
+      className={center ? 'ss-tap copy-center' : 'ss-tap'}
       onClick={async () => {
         await navigator.clipboard.writeText(text)
         setCopied(true)
@@ -13,8 +13,10 @@ export function CopyButton({ text }: { text: string }) {
       }}
       style={{
         position: 'absolute',
-        top: 10,
         right: 10,
+        // `center` (single-line boxes like Install) vertically centers via the
+        // .copy-center class; otherwise pin to the top (multi-line code blocks).
+        ...(center ? {} : { top: 10 }),
         border: '1px solid var(--border)',
         background: 'var(--bg)',
         color: copied ? 'var(--accent)' : 'var(--muted)',
