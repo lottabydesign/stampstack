@@ -110,17 +110,20 @@ code, pre, .code-card pre, .code-card code {
 .ss-tab { transition: color 0.18s ease, opacity 0.18s ease, transform 0.14s var(--ease-out); }
 a { transition: opacity 0.16s ease, color 0.18s ease; }
 
-/* Press feedback — every pointer type, motion-safe. */
-@media (prefers-reduced-motion: no-preference) {
-  .ss-tap:active { transform: scale(0.97); }
-  .ss-tab:active { transform: scale(0.95); }
-}
-
-/* Hover — only true hover devices, so taps on touch don't trigger it. */
+/* Hover — only true hover devices, so taps on touch don't trigger it.
+   MUST come before :active below — equal specificity means source order wins,
+   so :active needs to be last to override the hover scale during a press. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .ss-tap:hover { transform: scale(1.02); }
   .ss-tab:hover { opacity: 0.6; }
   a:hover { opacity: 0.6; }
+}
+
+/* Press feedback — every pointer type, motion-safe. Last so it wins over :hover
+   when the pointer is both hovering and pressing (the LVHA cascade order). */
+@media (prefers-reduced-motion: no-preference) {
+  .ss-tap:active { transform: scale(0.97); }
+  .ss-tab:active { transform: scale(0.95); }
 }
 
 /* Scroll-reveal: fade + rise into view (one-shot via IntersectionObserver). */
