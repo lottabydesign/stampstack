@@ -41,7 +41,7 @@ body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 14px;
+  height: 44px;
   background: linear-gradient(90deg, #295df6, #c6a0fd, #5cd500, #ff7a45, #ff3e8c, #00c9a7);
   filter: blur(33px);
   opacity: 0.2;
