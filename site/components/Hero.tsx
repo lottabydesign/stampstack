@@ -93,7 +93,7 @@ export function Hero() {
             className="rise"
             style={{ margin: 0, maxWidth: 486, color: '#252525', fontWeight: 500, fontSize: 14, letterSpacing: '-0.1px', lineHeight: '23px', fontFeatureSettings: '"swsh" 1', animationDelay: '200ms' }}
           >
-            stampstack is a postage-styled 3D carousel component. install and drop in whatever content you want on the stamps. no deps beyond react 18
+            stampstack is a postage-styled coverflow component. install and drop in whatever content you want on the stamps. no deps beyond react 18
           
           </p>
         
